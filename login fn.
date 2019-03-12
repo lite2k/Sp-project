@@ -1,0 +1,97 @@
+#include <iostream> 
+#include<fstream>
+#include<string>
+using namespace std;
+    
+int choice;
+string username;
+string password, password2;
+
+//add loop to count pass digits.
+void login() {
+    char logpass[20];                                      //to retrive data and compare/size of array = max password lenghts.
+	cout << "enter username : ";
+	cin>>username;                              
+	ifstream log;
+	string file = username + ".txt";                       //to make user enter file name.
+	log.open(file.c_str());                                //fn to use entered file name.
+	for (int i = 0; i < 2; i++)                            //loop to access password and store it in logpass since file format is standard and known.
+ 	{                                                      
+			log.getline(logpass, 20);                      // getline function to get password.
+			password2 = logpass;
+	}
+	log.close();
+	cout << "enter password : ";
+	cin>>password;
+	if (password2 == password)                             //to compare password in file to entered password.   
+	{
+		cout << "Login success." << " " << "Welcome " << username << endl;
+	}
+	else {
+		cout << "Invalid username or password,please retry." << endl;
+		login();                                           //to restart operation if condition is false.
+	}
+}
+void registerme() {                                        //registering a new user function.
+        cout << "enter username : ";
+	    cin>>username;
+		string file = username + ".txt";
+		ifstream file_exist;
+		file_exist.open(file.c_str());                     //check if username already exists to avoid duplication or data change or loss.
+		if (file_exist.fail())
+		{
+			ofstream newfile;
+			newfile.open(file.c_str());
+			newfile << username << endl;
+	        cout << "enter password : ";
+			cin >> password;
+	        cout << "confirm password : ";
+			cin >> password2;
+	     if (password == password2)                             	//to confirm password before saving.  
+	     {
+		    newfile << password2 << endl;
+			cout << "your username is " << username << "your password is " << password << endl;
+
+	     }
+	      else
+	      {
+		   cout << "Invalid,password doesnt match,please retry" << endl;
+		   registerme();
+	      }
+			newfile.close();
+		}
+		else
+		{
+			cout << "error,username already exist,please try again." << endl;
+			file_exist.close();
+				registerme();
+		}
+
+}
+int exit() {                                                 //exit function.
+	return 0;
+}
+int main()                                                   //main menu function for mssgs.(mod.).
+{
+	cout << "welcome to hall reservation system" << endl;
+	cout << "1.login" << endl;
+	cout << "2.register as a new user" << endl;
+	cout << "3.exit system"<<endl;
+	cout << "choose no. of operation : ";
+	cin >> choice;                                            //to choose an operation.
+	system("cls");                                            //clear screen for better interface.
+	switch (choice)
+	{
+	case 1:                                                   //function call according to no. of operation.
+		login();
+		break;
+	case 2:
+	   registerme();
+		break;
+	case 3:
+		exit();
+		break;
+	}
+	system("pause");
+	return 0;
+}
