@@ -33,39 +33,57 @@ void login() {
 	}
 }
 void registerme() {                                        //registering a new user function.
-        cout << "enter username : ";
-	    cin>>username;
-		string file = username + ".txt";
-		ifstream file_exist;
-		file_exist.open(file.c_str());                     //check if username already exists to avoid duplication or data change or loss.
-		if (file_exist.fail())
+	cout << "enter username : ";
+	cin >> username;
+	string file = username + ".txt";
+	ifstream file_exist;
+	file_exist.open(file.c_str());                     //check if username already exists to avoid duplication or data change or loss.
+	if (file_exist.fail())
+	{
+		ofstream newfile;
+		newfile.open(file.c_str());
+		newfile << username << endl;
+		cout << "enter password(lenght must be between4 & 17,spaces unavailable) : ";
+		cin >> password;
+		if (password.size() < 4)            //to check if password size is <4 by using .size() fn to get size of string.
 		{
-			ofstream newfile;
-			newfile.open(file.c_str());
-			newfile << username << endl;
-	        cout << "enter password : ";
-			cin >> password;
-	        cout << "confirm password : ";
-			cin >> password2;
-	     if (password == password2)                             	//to confirm password before saving.  
-	     {
-		    newfile << password2 << endl;
-			cout << "your username is " << username << "your password is " << password << endl;
-
-	     }
-	      else
-	      {
-		   cout << "Invalid,password doesnt match,please retry" << endl;
-		   registerme();
-	      }
+			cout << "invalid, password lenght too short,please retry" << endl;
 			newfile.close();
+			remove(file.c_str());  //remove file as it is created wether password is correct or invalid to prevent errors and empty files.
+			registerme();
+		}
+		else if (password.size() > 17)       
+		{
+			cout << "invalid, password lenght too long,please retry" << endl;
+			newfile.close();
+			remove(file.c_str());
+			registerme();
 		}
 		else
 		{
-			cout << "error,username already exist,please try again." << endl;
-			file_exist.close();
+			cout << "confirm password : ";
+			cin >> password2;
+			if (password == password2)                             	//to confirm password before saving.  
+			{
+				newfile << password2 << endl;
+				cout << "your username is : " << username << endl;
+				cout<< " your password is : " << password << endl;
+
+			}
+			else
+			{
+				cout << "Invalid,password doesnt match,please retry" << endl;
 				registerme();
+			}
+			newfile.close();
 		}
+	}
+	else
+	{
+		cout << "error,username already exist,please try again." << endl;
+		file_exist.close();
+		registerme();
+	}
 
 }
 int exit() {                                                 //exit function.
