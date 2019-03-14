@@ -1,0 +1,80 @@
+#include "pch.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+//fn return if id exist or not 
+bool eventId (string eventid){
+	bool eventidexist = true;
+	string  idOfFile;
+	ifstream eventIdFile; 
+	eventIdFile.open("EventId.txt",ios::app);
+	int cnt= 0;
+	while (!eventIdFile.eof())
+	{
+		eventIdFile >> idOfFile;
+		if (eventid == idOfFile)
+		{
+			eventidexist = false;
+			break;
+		}
+		cnt++;
+	};
+	eventIdFile.close();
+	int cnt2 = 0;
+	while (eventIdFile.eof())
+	{
+		if (eventidexist == true)
+		{
+			ofstream eventIdFile;
+			eventIdFile.open("EventId.txt", ios::app);
+			eventIdFile << eventid << endl;
+			eventIdFile.close();
+		} cnt2++;
+		break;
+
+	}
+		return eventidexist;
+	};
+int main()
+{
+	string eventid;
+	char x;
+	cout << "please enter id of event" << endl;
+	cout << "Note: event id must be of numbers at least 8 characters and doesn't contain spaces" << endl;
+	cin >> eventid;
+	//file that contain all id of events
+	while (true) {
+		bool check = eventId(eventid);
+		if (check==true)
+		{
+			cout << "Id accepted" << endl;
+			break;
+		}
+		else
+		{
+			cout << "invalid id"<<endl;
+			cout << "Do you want to enter different id y or n" << endl;
+			cin >> x;
+			if (x == 'y')
+			{
+				system("cls");
+				cout << "enter different id" << endl;
+				cin >> eventid;
+				check = eventId(eventid);
+				if (check == true)
+				{
+					cout << "Id accepted" << endl;
+					break;
+				}
+				
+				}
+			else if (x=='n')
+			{
+				break;
+			}
+
+		}
+	}
+		return 0;
+}
