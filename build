@@ -1,0 +1,270 @@
+#include <iostream> 
+#include<fstream>
+#include<string>
+using namespace std;
+  
+struct date
+{
+	int startdate;
+	int enddate;
+};
+struct event
+{
+	int ID;
+	string name;
+	date eventstime;
+	int seats[100];
+};
+struct halls
+{
+	string name;
+	string place;
+	int numberofseats;
+	event listofevents;
+};
+struct userdata {
+	string username;
+	string password;
+	string eventid;
+}user;
+
+int choice,adminop,userop;
+string usernamein,placein;
+string password, password2;
+bool admin = false;
+
+void login() {
+	char logpass[20];                                      //to retrive data and compare/size of array = max password lenghts.
+	cout << "Enter username : ";
+	cin >> usernamein;
+	ifstream log;
+	string file = usernamein + ".txt";                       //to make user enter file name.
+	log.open(file.c_str());                                //fn to use entered file name.
+	for (int i = 0; i < 2; i++)                            //loop to access password and store it in logpass since file format is standard and known.
+	{
+		log.getline(logpass, 20);                      // getline function to get password.
+		password2 = logpass;
+	}
+	log.close();
+	cout << "Enter password : ";
+	cin >> password;
+	if (password2 == password)                             //to compare password in file to entered password.   
+	{
+		user.username = usernamein;
+		user.password = password;
+	}
+	else {
+		cout << "Invalid username or password,please retry." << endl;
+		login();                                           //to restart operation if condition is false.
+	}
+	if (usernamein == "admin") {
+		admin = true;
+	}
+}
+void registerme() {                                        //registering a new user function.
+	cout << "Enter username : ";
+	cin >> usernamein;
+	string file = usernamein + ".txt";
+	ifstream file_exist;
+	file_exist.open(file.c_str());                     //check if username already exists to avoid duplication or data change or loss.
+	if (file_exist.fail())
+	{
+		ofstream newfile;
+		newfile.open(file.c_str());
+		newfile << usernamein << endl;
+		cout << "Enter password(lenght must be between 4 & 17 characters,spaces unavailable) : ";
+		cin >> password;
+		if (password.size() < 4)            //to check if password size is <4 by using .size() fn to get size of string.
+		{
+			cout << "Invalid, password lenght too short,please retry" << endl;
+			newfile.close();
+			remove(file.c_str());  //remove file as it is created wether password is correct or invalid to prevent errors and empty files.
+			registerme();
+		}
+		else if (password.size() > 17)       
+		{
+			cout << "Invalid, password lenght too long,please retry" << endl;
+			newfile.close();
+			remove(file.c_str());
+			registerme();
+		}
+		else
+		{
+			cout << "Confirm password : ";
+			cin >> password2;
+			if (password == password2)                             	//to confirm password before saving.  
+			{
+				newfile << password2 << endl;
+				cout << "Your username is : " << usernamein << endl;
+				cout<< " Your password is : " << password << endl;
+				system("pause");
+			}
+			else
+			{
+				cout << "Invalid,password doesnt match,please retry" << endl;
+				registerme();
+			}
+			newfile.close();
+		}
+	}
+	else
+	{
+		cout << "Error,username already exist,please try again." << endl;
+		file_exist.close();
+		registerme();
+	}
+}
+void menue() {
+	system("cls");
+	cout << "Welcome to hall reservation system" << endl<<endl;
+	cout << "1.Login" << endl;
+	cout << "2.Register as a new user" << endl;
+	cout << "3.Exit system" << endl<<endl;
+	cout << "Choose no. of operation : ";
+	cin >> choice;                                            //to choose an operation.
+	system("cls");                                            //clear screen for better interface.
+	switch (choice)
+	{
+	case 1:                                                   //function call according to no. of operation.
+		login();
+		break;
+	case 2:
+		registerme();
+		menue();
+		break;
+	case 3:
+		exit(1);
+		break;
+	}
+}
+void addnewhall()
+{
+	halls hall; //declaring a variable of type halls mentioned above
+	cout << "Please enter the following details : " << endl;
+	cout << "Hall's name : ";
+	cin >> hall.name;
+	string NewHall = hall.name + ".txt";
+	ifstream hall_exist;
+	hall_exist.open(NewHall.c_str());
+
+	if (hall_exist.fail())        //check if the hall's name doesn't exist,if true new hall's file will be created. 
+	{
+		ofstream newhalldetails;
+		newhalldetails.open(NewHall.c_str());
+		newhalldetails << hall.name << endl;
+		cout << "Place : ";                    //entering data of the added hall
+		cin >> hall.place;
+		newhalldetails << hall.place << endl;
+		cout << "Number of seats ( maxiumum 100 ) : ";
+		cin >> hall.numberofseats;
+		newhalldetails << hall.numberofseats << endl;
+		newhalldetails.close();
+		cout << "Hall added successfully.";
+		system("pause");
+	}
+	else  //if the previous condition was false so the name already exists
+	{
+		cout << "This name already exists." << endl <<  endl;
+		hall_exist.close();
+		system("Pause");
+		addnewhall();
+	}
+}
+void deletehall()
+{
+	halls hall;
+	cout << "Enter hall's name to be deleted : ";
+	cin >> hall.name;
+	string halltoberemoved = hall.name + ".txt";
+	ifstream hall_exist;
+	hall_exist.open(halltoberemoved.c_str());
+	if (hall_exist.fail())
+	{
+		cout << "This hall doesn't exist." << endl;
+		system("pause");
+		deletehall();
+	}
+	else
+	{
+		hall_exist.close();
+		remove(halltoberemoved.c_str());
+		cout << "Hall removed successfully." << endl;
+		system("pause");
+	}
+}
+void menuadmin()  //add caase to close
+{
+	system("cls");
+		cout << "Welcome adminstrator,What Would you like to do?" << endl << endl;
+		cout << "1.Add hall." << endl;
+		cout << "2.Delete hall." << endl;
+		cout << "3.Show record." << endl;
+		cout << "4.Show details of a certain hall." << endl; //list or search by name;
+		cout << "5.Show event in which hall." << endl;
+		cout << "6.Show all events in a certain timeline." << endl<<endl;
+		cout << "choose an operation : ";
+		cin >> adminop;
+		system("cls");
+		switch (adminop)
+		{
+		case 1:
+			addnewhall();
+			menuadmin();
+			break;
+		case 2:
+			deletehall();
+			menuadmin();
+			break;
+		case 3:
+			//show rec
+			break;
+		case 4:
+			//show details of certain hall
+			break;
+		case 5:
+			//show event in which hall
+			break;
+		case 6:
+			//events in timeline
+			break;
+		}
+}
+void menuuser() {
+	system("cls");
+	cout << "welcome " << user.username << ",What would you like to do?" << endl<<endl;
+	cout << "1.Reserve an event." << endl;
+	cout << "2.See reserved events." << endl;
+	cout << "3.cancel reserved events." << endl;
+	cout << "4.create a new event." << endl << endl;
+	cout << "Choose no. of operation :";
+	cin >> userop;
+	system("cls");
+	switch (userop)
+	{
+	case 1:
+		//reserve event fn.
+		break;
+	case 2:
+		//see reserved fn.
+		break;
+	case 3:
+		//cancel reserved fn.
+		break;
+	case 4:
+		//create an event fn.
+		break;
+	}
+}
+int main()                                                   //main menu function for mssgs.(mod.).
+{
+	menue();
+	if (admin) {
+		menuadmin();
+	}
+	else
+	{
+		menuuser();
+	}
+	system("pause");
+	return 0;
+}
