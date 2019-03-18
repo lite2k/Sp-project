@@ -1,0 +1,76 @@
+#include <iostream>
+#include <string>
+#include <ctime>
+#include <fstream>
+using namespace std;
+struct time2
+{
+	int day, month, year, startHour, startMin, endHour, endMin;
+};
+struct date
+{
+	time2 startdate;
+};
+struct event
+{
+	int ID;
+	string nameOfEvent;
+	date eventstime;
+	int seats;
+}
+ev
+;
+
+void inputEvents()
+{
+	//ev variable to cin data more easy
+	cout << "Enter event name:";
+	cin >> ev.nameOfEvent;
+	//to add event data to the vector
+	string eventFile = ev.nameOfEvent + ".txt";
+	ifstream eventFile_exist;
+	eventFile_exist.open(eventFile.c_str());
+	if (eventFile_exist.fail())
+	{
+		ofstream newEventFile;
+		newEventFile.open(eventFile.c_str());
+		newEventFile << ev.nameOfEvent << endl;
+		//fn to create a random id to avoid reprating any id
+		srand(time(NULL));
+		ev.ID = rand();
+		newEventFile << ev.ID;
+		cout << endl << "Enter event start day : month : year" << endl;
+		cin >> ev.eventstime.startdate.day;
+		newEventFile << ev.eventstime.startdate.day << ' ';
+		cout << ":";
+		cin >> ev.eventstime.startdate.month;
+		newEventFile << ev.eventstime.startdate.month << ' ';
+		cout << ":";
+		cin >> ev.eventstime.startdate.year;
+		newEventFile << ev.eventstime.startdate.year << endl;
+		cout << endl << "Enter event start hour :" << endl;
+		cin >> ev.eventstime.startdate.startHour;
+		newEventFile << ev.eventstime.startdate.startHour << ' ';
+		cout << endl << " enter start minutes :";
+		cin >> ev.eventstime.startdate.startMin ;
+		newEventFile << ev.eventstime.startdate.startMin << ' ';
+		cout << endl << "Enter event end hour :";
+		cin >> ev.eventstime.startdate.endHour ;
+		newEventFile << ev.eventstime.startdate.endHour << endl;
+		cout << endl << "Enter event end minutes :";
+		newEventFile << ev.eventstime.startdate.endMin << endl;
+		newEventFile.close();
+	}
+}
+int main()
+{
+	char ans;
+	cout << "Do you want to add event yes or no ?" << endl;
+	cin >> ans;
+	if (ans == 'yes') {
+		system("cls");
+		inputEvents();
+	}
+	return 0;
+	system("pause");
+}
