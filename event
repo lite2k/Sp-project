@@ -1,19 +1,15 @@
-#include "pch.h"
 #include <iostream>
 #include <string>
-#include <cstdlib>
 #include <ctime>
 #include <fstream>
-#include <vector>
 using namespace std;
 struct time2
 {
-	int day, month, year;
+	int day, month, year, startHour, startMin, endHour, endMin;
 };
 struct date
 {
 	time2 startdate;
-	time2 enddate;
 };
 struct event
 {
@@ -24,72 +20,56 @@ struct event
 }
 ev
 ;
-struct halls
-{
-	string nameOfHall;
-	string place;
-	int numberofseats;
-	event listofevents;
-};
-//vector to add data easily & avoid requiring size
-    vector <event> v;
-void inputEvents(event& v)
+
+void inputEvents()
 {
 	//ev variable to cin data more easy
 	cout << "Enter event name:";
 	cin >> ev.nameOfEvent;
 	//to add event data to the vector
-	v.nameOfEvent.push_back( ev.nameOfEvent );
-	string eventFile = v.nameOfEvent + ".txt";
+	string eventFile = ev.nameOfEvent + ".txt";
 	ifstream eventFile_exist;
-	eventFile_exist.open(v.nameOfEvent.c_str());
+	eventFile_exist.open(eventFile.c_str());
 	if (eventFile_exist.fail())
 	{
 		ofstream newEventFile;
-		newEventFile.open(v.nameOfEvent.c_str());
-		newEventFile << v.nameOfEvent << endl;
+		newEventFile.open(eventFile.c_str());
+		newEventFile << ev.nameOfEvent << endl;
+		//fn to create a random id to avoid reprating any id
+		srand(time(NULL));
+		ev.ID = rand();
+		newEventFile << ev.ID;
+		cout << endl << "Enter event start day : month : year" << endl;
+		cin >> ev.eventstime.startdate.day;
+		newEventFile << ev.eventstime.startdate.day << ' ';
+		cout << ":";
+		cin >> ev.eventstime.startdate.month;
+		newEventFile << ev.eventstime.startdate.month << ' ';
+		cout << ":";
+		cin >> ev.eventstime.startdate.year;
+		newEventFile << ev.eventstime.startdate.year << endl;
+		cout << endl << "Enter event start hour :" << endl;
+		cin >> ev.eventstime.startdate.startHour;
+		newEventFile << ev.eventstime.startdate.startHour << ' ';
+		cout << endl << " enter start minutes :";
+		cin >> ev.eventstime.startdate.startMin ;
+		newEventFile << ev.eventstime.startdate.startMin << ' ';
+		cout << endl << "Enter event end hour :";
+		cin >> ev.eventstime.startdate.endHour ;
+		newEventFile << ev.eventstime.startdate.endHour << endl;
+		cout << endl << "Enter event end minutes :";
+		newEventFile << ev.eventstime.startdate.endMin << endl;
+		newEventFile.close();
 	}
-	ofstream eventFile;
-	eventFile_exist.open(eventFile.c_str(),ios::app);
-	//fn to create a random id to avoid reprating it
-	srand(time(NULL));
-	v.ID = rand();
-	cout << endl<<"Enter event start day : month : year"<<endl;
-	cin >> ev.eventstime.startdate.day;
-	v.eventstime.startdate.day.push_back(ev.eventstime.startdate.day);
-	eventFile << v.eventstime.startdate.day << ' ';
-	cout <<":" ;
-	cin >> ev.eventstime.startdate.month;
-	v.eventstime.startdate.month.push_back(ev.eventstime.startdate.month);
-	cout << ":";
-	cin >> ev.eventstime.startdate.year;
-	v.eventstime.startdate.year.push_back(ev.eventstime.startdate.year);
-	eventFile << v.eventstime.startdate.year << endl;
-	cout << endl << "Enter event end day : month : year" << endl;
-	cin >> ev.eventstime.enddate.day;
-	v.eventstime.enddate.day.push_back(ev.eventstime.enddate.day);
-	eventFile << v.eventstime.enddate.day << ' ';
-	cout << ":";
-	cin >> ev.eventstime.enddate.month;
-	v.eventstime.enddate.month.push_back(ev.eventstime.enddate.month);
-	eventFile << v.eventstime.enddate.month<< ' ';
-	cout << ":";
-	cin >> ev.eventstime.enddate.year;
-	v.eventstime.enddate.year.push_back(ev.eventstime.enddate.year);
-	eventFile << v.eventstime.enddate.year << endl;
-	cout << endl << "Enter number of attendants :" << endl << "Note : maxmium attendants number is 100" << endl;
-	cin >> ev.seats;
-	v.seats.push_back(ev.seats);
-	eventFile << v.seats;
 }
 int main()
-{ 
-	string ans;
+{
+	char ans;
 	cout << "Do you want to add event yes or no ?" << endl;
 	cin >> ans;
-	if (ans == "yes") {
+	if (ans == 'yes') {
 		system("cls");
-		inputEvents(v);
+		inputEvents();
 	}
 	return 0;
 	system("pause");
