@@ -1,0 +1,76 @@
+include <iostream>
+#include <sstream>
+#include <string>
+#include <ctime>
+#include <fstream>
+#include <vector>
+using namespace std;
+struct eventdata
+{
+	int ID;
+	string nameOfEvent,startDate;
+	string startTime,endTime;
+};
+vector < eventdata > vec;
+void inputEvents()
+{	//ev variable to cin data more easy	
+ 	    cin.ignore();
+	    eventdata ev;
+	    cout << "Enter event name : ";
+	    getline(cin, ev.nameOfEvent);
+		string eventFile = ev.nameOfEvent + ".txt";
+		ifstream eventFile_exist;
+		eventFile_exist.open(eventFile.c_str());
+		if (eventFile_exist.fail())
+		{
+			ofstream newEventFile;
+			newEventFile.open(eventFile.c_str());
+			newEventFile << ev.nameOfEvent << endl;
+			//fn to create a random id to avoid reprating any id
+	        //cin.ignore(1000, '\n');   //to avoid errors of getline with strings
+	        srand(NULL());
+	        ev.ID = rand();
+			cin.ignore();
+	        cout <<"Enter event start(dd/mm/yy) : " << endl;
+			getline(cin, ev.startDate);
+			cout << endl << "Enter event start time(hh:mm) : " << endl;
+	        getline(cin, ev.startTime);
+	        cout << endl << "Enter event end time(hh:mm) : " << endl;
+	        getline(cin, ev.endTime);
+              if (ev.nameOfEvent=="" && ev.startDate=="" && ev.startTime=="" && ev.endTime=="")
+	          {
+				cout << "missing data,event not created.";
+				remove(eventFile.c_str());
+				system("pause");
+				inputEvents();
+              } else 
+			  {
+	                 newEventFile << ev.ID << endl;
+	                 newEventFile << ev.startDate;
+	                 newEventFile << ev.startTime;
+	                 newEventFile << ev.endTime;
+	                 newEventFile.close();
+					 cout << "file created"<<endl;
+               }
+		}
+		else
+		{
+			cout << "name already found " << endl;
+			inputEvents();
+		}
+}
+int main()
+{
+	char answer;
+		cout << "Do you want to add event y or n ?" << endl;
+	cin >> answer;
+	if (answer == 'y' ) {
+		system("cls");
+		inputEvents();
+	}
+	cout << "X" << endl;
+	system("pause");
+	return 0;
+	
+
+}
