@@ -1,0 +1,68 @@
+# Sp-project
+#include <iostream> 
+#include < fstream> 
+#include < string> 
+#include<cstring>
+#include<vector>
+using namespace std ; 
+//structure for date 
+struct date
+{
+	int startdate;
+	int enddate ;
+};
+//structure for event 
+struct event 
+{
+	int ID ;
+	string name ;
+	date eventstime ;
+	int seats[100] ; 
+};
+//end of struct 
+void searchbyname () ;
+int main () 
+{
+
+	
+		searchbyname ();
+	
+
+	system ("pause")  ;
+	return 0 ; 
+} //end of main 
+
+ //fun of search by name 
+void searchbyname() 
+{
+	event events ; 
+	string eventfile ;
+	cout << " Enter the name of event  " << endl ; 
+	cin >> events.name ; 
+	eventfile=events.name+".txt";
+	ifstream myfile ;
+	myfile.open(eventfile.c_str()); 
+	if ( myfile.fail())
+	{
+		cout<<  " Invailed name , enter your name again " << endl ;       //invalied name 
+		searchbyname ();
+	} 
+	else
+	{
+		string eventhall; 
+        ifstream myfiles  ; 
+        myfiles.open(eventfile.c_str());
+		
+
+		//display the hall of event
+		cout << " your event at : "   ;
+		for (int i = 0; i <2; i++) 
+
+		{
+			myfiles.getline(eventhall.c_str);    //get   event place 
+		}
+		cout<<eventhall<<endl;  // display the place of event 
+	
+}
+	
+}
