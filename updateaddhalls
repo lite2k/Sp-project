@@ -38,9 +38,17 @@ void addnewhall(void)
 	system("cls");
 	cout << "Please enter the following details : " << endl;
 	cout << "Hall's name : ";
-	cin.ignore(); //lesa hafhamo
+	cin.ignore(); 
 
 	getline(cin, hall.name);
+
+	if (hall.name.empty())
+	{
+		cout << "Inavlid data,please retry";
+		system("pause");
+	
+		addnewhall();
+	}
 
 		string NewHall = hall.name + ".txt";
 		ifstream hall_exist;
@@ -60,10 +68,10 @@ void addnewhall(void)
 			}
 			else
 			{
-				hall_exist.close();
+				newhalldetails.close();
 				remove(NewHall.c_str());
 				cout << "Inavlid data,please retry";
-				system("cls");
+			
 				addnewhall();
 			}
 			cout << "Room number : ";
@@ -75,7 +83,7 @@ void addnewhall(void)
 			}
 			else
 			{
-				hall_exist.close();
+				newhalldetails.close();
 				remove(NewHall.c_str());
 				cout << "Inavlid data,please retry";
 				system("cls");
@@ -86,7 +94,7 @@ void addnewhall(void)
 			cin >> hall.numberofseats;
 			if (hall.numberofseats <= 0)
 			{
-				hall_exist.close();
+				newhalldetails.close();
 				remove(NewHall.c_str());
 				cout << "Invalid data,please retry.";
 				system("cls");
@@ -102,7 +110,7 @@ void addnewhall(void)
 				}
 				else
 				{
-					hall_exist.close();
+					newhalldetails.close();
 					remove(NewHall.c_str());
 					cout << "Sorry,exceeded number of seats,please retry.";
 					system("pause");
@@ -132,7 +140,8 @@ void deletehall()
 	halls hall;
 	system("cls");
 	cout << "Enter hall's name : ";
-	cin >> hall.name;
+	cin.ignore(); 
+	getline(cin, hall.name);
 	string halltoberemoved = hall.name + ".txt";
 	ifstream hall_exist;
 	hall_exist.open(halltoberemoved.c_str());
