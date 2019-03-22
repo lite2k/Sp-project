@@ -3,67 +3,88 @@
 #include <ctime>
 #include <fstream>
 using namespace std;
-struct event
+struct eventdata
 {
 	int ID;
-	string nameOfEvent;
-	int day, month, year, startHour, startMin, endHour, endMin;
-}
-ev
-;
-
+	string nameOfEvent,startDate;
+	string startTime,endTime,hallName;
+}event;
 void inputEvents()
-{
-	//ev variable to cin data more easy
-	cout << "Enter event name:";
-	cin >> ev.nameOfEvent;
-	//to add event data to the vector
-	string eventFile = ev.nameOfEvent + ".txt";
-	ifstream eventFile_exist;
-	eventFile_exist.open(eventFile.c_str());
-	if (eventFile_exist.fail())
-	{
-		ofstream newEventFile;
-		newEventFile.open(eventFile.c_str());
-		newEventFile << ev.nameOfEvent << endl;
-		//fn to create a random id to avoid reprating any id
-		srand(time(NULL));
-		ev.ID = rand();
-		newEventFile << ev.ID << endl;
-		cout << endl << "Enter event start day : month : year" << endl;
-		cin >> ev.day;
-		newEventFile << ev.day << endl;
-		cout << ":";
-		cin >> ev.month;
-		newEventFile << ev.month << endl;
-		cout << ":";
-		cin >> ev.year;
-		newEventFile << ev.year << endl;
-		cout << endl << "Enter event start hour :" << endl;
-		cin >> ev.startHour;
-		newEventFile << ev.startHour << endl;
-		cout << endl << " enter start minutes :";
-		cin >> ev.startMin ;
-		newEventFile << ev.startMin << endl;
-		cout << endl << "Enter event end hour :";
-		cin >> ev.endHour ;
-		newEventFile << ev.endHour << endl;
-		cout << endl << "Enter event end minutes :";
-		cin >> ev.endMin;
-		newEventFile << ev.endMin << endl;
-		newEventFile.close();
-	}
+{	
+	    //to avoid errors of getline with strings
+ 	    cin.ignore(1000, '\n');
+	    cout << "Enter event name : ";
+	    getline(cin, event.nameOfEvent); //getline to take data with spaces for more easy taking data from user
+		//string contain name with end of .txt to create fill more easy 
+		string eventFile = event.nameOfEvent + ".txt";
+		ifstream eventFile_exist;  //to check if the file already exist or not
+		eventFile_exist.open(eventFile.c_str()); //c_str() is function that change string into constant char
+	   // this condition is to take data if the event does not exist 
+		if (eventFile_exist.fail())
+		{   
+			ofstream newEventFile;
+			newEventFile.open(eventFile.c_str()); //new file is created with the event name
+			newEventFile << event.nameOfEvent << endl;
+			//fn to create a random id to avoid reprating any id
+	        srand(time(NULL));
+			event.ID = rand() ;
+	        cout <<"Enter event start(dd/mm/yy)  " << endl;
+			getline(cin, event.startDate);
+			cout << endl << "Enter event start time(hh:mm)  " << endl;
+	        getline(cin, event.startTime);
+	        cout << endl << "Enter event end time(hh:mm)  " << endl;
+	        getline(cin, event.endTime);
+			cout << endl << "Enter which  hall event is in" << endl;
+			getline(cin, event.hallName);
+			//this condition is to avoid creating an event with uncompleted data
+              if (event.nameOfEvent.empty() || event.startDate.empty() || event.startTime.empty() || event.endTime.empty() || event.hallName.empty())
+	          {
+				cout << "missing data,event not created.\n";
+				//closing the file to remove it as if it is not closed it will not be deleted
+				newEventFile.close();
+				remove(eventFile.c_str());
+				system("pause");
+				system("cls");
+				cout << "if you want to try again press enter" << endl;
+				inputEvents();
+				
+              }//to send data to the file if all the data is completed and nothing missed
+			  else 
+			  {
+	                 newEventFile << event.ID << endl;
+					 newEventFile << event.startDate << endl;
+					 newEventFile << event.startTime << endl;
+					 newEventFile << event.endTime << endl;
+					 newEventFile << event.hallName << endl;
+	                 newEventFile.close();
+					 cout << "file created"<<endl;
+              }
+		}
+		else
+		{
+			cout << "name already found " << endl;
+			inputEvents(); //to allow user to enter new event name
+		}
 }
 int main()
 {
 	char answer;
+	//if user entered invalid character it will be repeated
+	do //to take reply from user & allow the user to add more than an event if he want 
+	{
 		cout << "Do you want to add event y or n ?" << endl;
-	cin >> answer;
-	if (answer == 'y' ) {
+	    cin >> answer;
+	if (answer == 'y' || answer == 'Y') 
+	{
 		system("cls");
 		inputEvents();
 	}
-	return 0;
-	system("pause");
-
+	else if (answer== 'n'|| answer =='N')
+	{
+		cout << "thanks \n";
+		break;
+	}
+	}   while (answer != 'y' || answer != 'n' ||answer != 'Y' || answer != 'N');
+	    system("pause");
+	    return 0;
 }
