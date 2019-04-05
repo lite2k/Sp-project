@@ -1,0 +1,127 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <ctime>
+#include <fstream>
+using namespace std;
+
+struct eventdata
+{
+	int ID;
+	string nameOfEvent, startDate;
+	string startTime, endTime, hallName;
+}
+event, events[100];
+void eventNames(eventdata nameOfEvents)//function to create list of events
+{
+        ofstream eventNamesFile;
+		eventNamesFile.open("EventNames.txt", ios::app);//ios::app to avoid over write in text file
+		eventNamesFile << nameOfEvents.nameOfEvent ;
+		eventNamesFile.close();
+
+};
+void inputEvents()
+{
+	//to avoid errors of getline with strings
+	cin.ignore();
+	cout << "Enter event name : ";
+	getline(cin, event.nameOfEvent); //getline to take data with spaces for more easy taking data from user
+	//string contain name with end of .txt to create fill more easy 
+	string eventFile = event.nameOfEvent + ".txt";
+	ifstream eventFile_exist;  //to check if the file already exist or not
+	eventFile_exist.open(eventFile.c_str()); //c_str() is function that change string into constant char
+   // this condition is to take data if the event does not exist 
+	if (eventFile_exist.fail())
+	{
+		ofstream newEventFile;
+		newEventFile.open(eventFile.c_str()); //new file is created with the event name
+		newEventFile << event.nameOfEvent << endl;
+		//fn to create a random id to avoid reprating any id
+		srand(time(NULL));
+		event.ID = rand();
+		cout << "Enter event start(dd/mm/yy)  " << endl;
+		getline(cin, event.startDate);
+		cout << endl << "Enter event start time(hh:mm)  " << endl;
+		getline(cin, event.startTime);
+		cout << endl << "Enter event end time(hh:mm)  " << endl;
+		getline(cin, event.endTime);
+		cout << "Please choose the hall by number"<<endl;
+		ifstream  listOfHalls ;
+		listOfHalls.open("ListOfHalls.txt");
+		string hallName;
+		vector <string> nameOfHalls;//because we do not know number of halls
+		while (!listOfHalls.eof())
+		{
+		//to take name of halls 
+		  getline(listOfHalls,hallName) ;
+			nameOfHalls.push_back(hallName);
+		}
+		//to display all hall names
+		for (int i = 0 ; i < nameOfHalls.size(); i++)
+		{
+			cout << i+1 << "." << nameOfHalls[i] <<endl;
+		}
+		int choice;
+		cin >> choice;
+		//choice is more than index of needed by one
+		nameOfHalls[choice-1]+=".txt";
+		//this condition is to avoid creating an event with uncompleted data
+		if (event.nameOfEvent.empty() || event.startDate.empty() || event.startTime.empty() || event.endTime.empty() || event.startDate.size()<8 ||event.startTime.size()<5||event.endTime.size()<5 )
+		{
+			cout << "missing data,event not created.\n";
+			//closing the file to remove it as if it is not closed it will not be deleted
+			newEventFile.close();
+			remove(eventFile.c_str());
+			system("pause");
+			system("cls");
+			cout << "if you want to try again press enter" << endl;
+			inputEvents();
+
+		}//to send data to the file if all the data is completed and nothing missed
+		else
+		{
+			// eventNames(event);
+			newEventFile << event.ID << endl;
+			newEventFile << event.startDate << endl;
+			newEventFile << event.startTime << endl;
+			newEventFile << event.endTime << endl;
+			newEventFile << event.hallName << endl;
+			newEventFile.close();
+			cout << "file created" << endl;
+			// to send name of event to the hall
+			    ofstream  nameOfSelectedHall;
+			//cout << nameOfHalls[choice - 1];
+			    nameOfSelectedHall.open(nameOfHalls[choice - 1],ios::app);
+				nameOfSelectedHall << event.nameOfEvent << endl;
+			    nameOfSelectedHall.close();
+				eventNames(event);
+		}
+	}
+	else
+	{
+		cout << "name already found " << endl;
+		inputEvents(); //to allow user to enter new event name
+	}
+}
+int main()
+{
+	char answer;
+	//if user entered invalid character it will be repeated
+	do //to take reply from user & allow the user to add more than an event if he want 
+	{
+		cout << "Do you want to add event y or n ?" << endl;
+		cin >> answer;
+		if (answer == 'y' || answer == 'Y')
+		{
+			system("cls");
+			inputEvents();
+		}
+		else if (answer == 'n' || answer == 'N')
+		{
+			cout << "thanks \n";
+			break;
+		}
+	} while (answer != 'y' || answer != 'n' || answer != 'Y' || answer != 'N');
+	system("pause");
+	return 0;
+}
