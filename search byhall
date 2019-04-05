@@ -1,0 +1,42 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+using namespace std;
+
+void searchbyhall() {
+	cout << "Enter hall name :" << endl;
+	string hallname;
+	getline(cin, hallname);
+	string file = hallname + ".txt";
+	ifstream infile;
+	infile.open(file.c_str());
+
+	if (hallname.empty())
+	{
+		cout << "Empty value! " << endl;
+		searchbyhall();
+	}
+	if (infile.fail()) {
+		cout << "incorrect hall name!" << endl;
+		searchbyhall();
+	}
+	string item;
+	vector <string> halldata;
+	while (!infile.eof()) {
+	    getline(infile,item);
+		halldata.push_back(item);
+	}
+	cout << "hall name : " << halldata[0] << endl;
+	cout << "floor : " << halldata[1] << endl;
+	cout << "room : " << halldata[2] << endl;
+	cout << "number of chairs : " << halldata[3] << endl;
+	cout << "list of events : " << endl;
+	for (int i = 4; i < halldata.size(); i++)
+		cout << halldata[i] << endl;
+}
+int main() {
+	searchbyhall();
+	system("pause");
+	return 0;
+}
