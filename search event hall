@@ -1,0 +1,29 @@
+# Sp-project
+#include <iostream>
+#include <string>
+using namespace std; 
+
+// search the event in which hall fn 
+void searcheventhall() {
+	string eventhall;
+		cout << " Enter the event name :";
+		for (int i = 0; i < 1; i++) // do not forget change the number f elements 
+		{
+			if (eventhall == event[i].eventname) // initilization of array  & struct later  
+			{
+				cout << "The event at :" << event[i].place << endl;
+			}
+			else
+			{
+				cout << "Invailed name , enter event name again " << endl;
+				system("cls");
+				searcheventhall();
+			}
+		}
+}
+int main()
+{
+	searcheventhall();
+	system("pause");
+	return 0; 
+}
