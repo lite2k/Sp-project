@@ -1,0 +1,80 @@
+# Sp-project
+#include <iostream>
+#include <string>
+using namespace std;
+struct date
+{
+	string day;
+	string month;
+	string  year;
+};
+
+struct eventdate
+{
+	string eventname;
+	string id;
+	string place;
+	string starttine;
+	string enddate;
+}events[100];
+struct userdate
+{
+	string username;
+	string password;
+	string eventid[100];
+} user[100];
+struct currentuser {
+	string username;
+	string evnetid[100];
+};
+currentuser userx;
+void cancelreservation()
+{
+	int count1 = 0, count2 = 0;               // the actual elements of array
+	for (int i = 0; i < 100; i++)     // identifay the eventid  of user
+	{
+
+		if (userx.evnetid[i].empty());
+		{
+			break;
+		}
+		{
+			count1++;
+		}
+	}
+	for (int j = 0; j < 100; j++)       // identifay  the eventid of events 
+	{
+		if (events[j].id.empty());
+		{
+			break;
+		}
+		{
+			count2++;
+		}
+	}
+	for (int i = 0; i < count1; i++)
+	{
+		for (int j = 0; j < count2; j++)
+		{
+			if (userx.evnetid[i] == events[j].id)
+			{
+				cout << i+1 << ":"  << events[j].eventname << endl;
+				break;
+			}
+		}
+	}
+	cout << " Select the event you want to cancel " << endl; 
+	int choice; 
+	cin >> choice; 
+	for (int i = choice -1 ; i < count1-2 ; i++)
+	{
+		userx.evnetid[i] = userx.evnetid[i + 1];
+	}
+}
+int main()
+{
+
+	cancelreservation();
+	system("pause");
+	return 0;
+}
