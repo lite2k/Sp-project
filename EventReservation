@@ -1,0 +1,73 @@
+#include<iostream>
+#include<string>
+using namespace std;
+struct date {
+	string day;
+	string year;
+	string month;
+};
+struct events {
+	string name;
+	string evinhall;
+	string id;
+	date startdate;
+	string starttime;
+	string endtime;
+	int evseats;
+};
+struct currentuser
+{
+	string username;
+	
+	string eventid[100];
+};
+currentuser reserver;
+events eventdata[100];
+
+void eventreservation()
+{
+	//get size of array
+  int sizeofarray = 0;
+	for (int j = 0; j < 100; j++)
+	{
+		if (eventdata[j].name.empty())
+		{
+			break;
+		}
+		else
+		{
+			sizeofarray++;
+		}
+	}
+		
+	cout << "Select the event you want to reserve : " << endl;
+	int index = 1; //for organization only
+  //cout the events with available seats only
+	for (int i = 0; i < sizeofarray; i++)
+	{
+		if (eventdata[i].evseats < 100)
+		{
+		    cout << index << '-';
+			cout << eventdata[i].name << endl;
+			index++;
+		}
+		else
+		{
+			continue;
+		}
+	}
+	int choice; 
+	cin >> choice;
+    reserver.eventid[sizeofarray] = eventdata[choice - 1].id;
+    eventdata[choice - 1].evseats--;
+	cout << "Reservation done successfully!" << endl;
+	
+}
+int main()
+{
+	geteventdata();
+	eventreservation();
+	
+	system("pause");
+	return 0;
+}
