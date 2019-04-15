@@ -1,0 +1,96 @@
+#include<iostream>
+#include<string>
+#include<fstream>
+#include<sstream>
+#include<cctype>
+using namespace std;
+struct date {
+	string day;
+	string year;
+	string month;
+};
+struct shows {
+	string name;
+	string id;
+	string evinhall;
+	date startdate;
+	date enddate;
+	string starttime;
+	string endtime;
+	int seats;
+};
+struct currentuser
+{
+	string username;
+	string showid[100];
+};
+currentuser reserver;
+shows showdata[100];
+
+void showreservation()
+{
+//to get size of the array (no. of shows present out of 100)
+int sizeofarray = 0;  
+	for (int j = 0; j < 100; j++)
+	{
+		if (showdata[j].name.empty())
+		{
+			break;
+		}
+		else
+		{
+			sizeofarray++;
+		}
+	}
+
+	cout << "Select the show you want to reserve : " << endl;
+	int index=1; //to write the indices properly not according to iterations
+	for (int i = 0; i < sizeofarray; i++)
+	{
+		if (showdata[i].seats < 100) //check the shows with available places
+		{
+			cout << index << '-';
+			cout << showdata[i].name << endl;
+			index++;
+		}
+		else
+		{
+			continue;
+		}
+
+		
+	}
+	int choice;
+	cin >> choice;
+  //lines 66,69,70 => to display an error message if the user entered invalid data type 
+	if (cin.fail()) //check that the entered data matches the variable data type
+	{
+		cout << "Error!Retry." << endl;
+		cin.clear(); //reset the failbit
+		cin.ignore(); //ignore the offending character 
+		showreservation();
+	}
+		else
+		{
+		if (choice < index && choice > 0) //To display an error message (line 82) if the user entered an index other than the displayed
+
+		{
+			reserver.showid[sizeofarray] = showdata[choice - 1].id;
+			showdata[choice - 1].seats--; 
+			cout << "Reservation done successfully!" << endl;
+		}
+	else
+	{
+		cout << "Error!Retry." << endl;
+		showreservation();
+	}
+		}
+	
+}
+int main()
+{
+	showreservation();
+
+	system("pause");
+	return 0;
+}
