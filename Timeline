@@ -1,0 +1,86 @@
+#include<iostream>
+#include<string>
+#include<fstream>
+#include<sstream>
+using namespace std;
+struct date {
+	string day;
+	string year;
+	string month;
+};
+struct shows {
+	string name;
+	string id;
+	string evinhall;
+	date startdate;
+	date enddate;
+	string starttime;
+	string endtime;
+	int seats;
+};
+struct currentuser
+{
+	string username;
+
+	string showid[100];
+};
+currentuser reserver;
+shows showdata[100];
+
+void timeline()
+{
+		int sizeofarray = 0;
+		for (int j = 0; j < 100; j++)
+		{
+			if (showdata[j].name.empty())
+			{
+				break;
+			}
+			else
+			{
+				sizeofarray++;
+			}
+		}
+	string userday, usermonth, useryear;
+	cout << "Enter required date(D/M/Y) :";
+	cin >> userday >> usermonth >> useryear; //enter date that will be compared to shows' dates
+//Loop to check if there was shows at that date
+		for (int r = 0; r < 100;r++)
+		{
+			if (showdata[r].startdate.day == userday && showdata[r].startdate.month == usermonth && showdata[r].startdate.year == useryear)
+			{
+				cout << "* Available Shows *" << endl;
+				break;
+			}
+			else
+			{
+				cout << "Sorry , no available shows." << endl;
+				break;
+			}
+//If date was found, display available shows details
+		}
+		for (int k = 0; k < sizeofarray; k++)
+		{
+			if (showdata[k].seats < 100) //check no of seats
+			{
+				if (showdata[k].startdate.day == userday && showdata[k].startdate.month == usermonth && showdata[k].startdate.year == useryear)
+				{
+					cout << "Name :" << showdata[k].name << endl;
+					cout << "Location : " << showdata[k].evinhall << endl;
+					cout << "From " << showdata[k].starttime << " to " << showdata[k].endtime << endl;
+					cout << "-----------" << endl;
+
+				}
+
+			}
+		}
+	}
+
+int main()
+{
+	
+	timeline();
+	system("pause");
+
+	return 0;
+}
