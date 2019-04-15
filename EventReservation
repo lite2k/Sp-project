@@ -1,5 +1,7 @@
 #include<iostream>
 #include<string>
+#include<fstream>
+#include<sstream>
 using namespace std;
 struct date {
 	string day;
@@ -23,11 +25,72 @@ struct currentuser
 };
 currentuser reserver;
 events eventdata[100];
+void geteventdata()
+{
+	int nameindex = 0;
+	int evinhallindx = 1;
+	int idindex = 2;
+	int dayindx = 3;
+	int monthindx = 4;
+	int yearindx = 5;
+	int stime = 6;
+	int etime = 7;
+	int evseatsindex = 8;
+	string tempev[100];
+	ifstream geteventdata;
+	geteventdata.open("eventdata.txt");
+	if (geteventdata.fail())
+	{
+		cout << "error" << endl;
+		system("pause");
+	}
+	else
+	{
+		for (int i = 0; i < 100; i++)
+		{
+			getline(geteventdata, tempev[i]);
+		}
+		for (int i = 0; i < 100; i++)
+		{
+			if (tempev[i].empty())
+			{
+				break;
+			}
+			else
+			{
+				if (tempev[nameindex].empty()) {
+					break;
+				}
+				else
+				{
+					eventdata[i].name = tempev[nameindex];
+					eventdata[i].evinhall = tempev[evinhallindx];
+					eventdata[i].id = tempev[idindex];
+					eventdata[i].startdate.day = tempev[dayindx];
+					eventdata[i].startdate.month = tempev[monthindx];
+					eventdata[i].startdate.year = tempev[yearindx];
+					eventdata[i].starttime = tempev[stime];
+					eventdata[i].endtime = tempev[etime];
+					stringstream tempseats(tempev[evseatsindex]);
+					tempseats >> eventdata[i].evseats;
+				}
+				nameindex += 9;
+				idindex += 9;
+				monthindx += 9;
+				yearindx += 9;
+				stime += 9;
+				etime += 9;
+				evseatsindex += 9;
+			}
+		}
 
+	}
+	geteventdata.close();
+
+}
 void eventreservation()
 {
-	//get size of array
-  int sizeofarray = 0;
+	int sizeofarray = 0;
 	for (int j = 0; j < 100; j++)
 	{
 		if (eventdata[j].name.empty())
@@ -41,27 +104,39 @@ void eventreservation()
 	}
 		
 	cout << "Select the event you want to reserve : " << endl;
-	int index = 1; //for organization only
-  //cout the events with available seats only
+	int index = 1;
 	for (int i = 0; i < sizeofarray; i++)
 	{
-		if (eventdata[i].evseats < 100)
-		{
 		    cout << index << '-';
-			cout << eventdata[i].name << endl;
 			index++;
-		}
-		else
-		{
-			continue;
-		}
+			cout << eventdata[i].name << endl;
+		
+		
 	}
 	int choice; 
 	cin >> choice;
-    reserver.eventid[sizeofarray] = eventdata[choice - 1].id;
-    eventdata[choice - 1].evseats--;
-	cout << "Reservation done successfully!" << endl;
-	
+	if (cin.fail())
+	{
+		cout << "Error!Retry." << endl;
+		cin.clear();
+		cin.ignore();
+		eventreservation();
+	}
+	else
+	{
+		if (choice < index && choice > 0)
+
+		{
+			reserver.eventid[sizeofarray] = eventdata[choice - 1].id;
+			cout << "Reservation done successfully!" << endl;
+		}
+		else
+		{
+			cout << "Error!Retry." << endl;
+			eventreservation();
+
+		}
+	}
 }
 int main()
 {
