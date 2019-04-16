@@ -1,10 +1,11 @@
 #include<iostream>6
 #include<fstream>
 #include<string>
+#include<fstream>
 using namespace std;
 struct hallplace {
-	string floor;
-	string room;
+	int floor;
+	int room;
 };
 struct hall {
 	string name;
@@ -12,54 +13,10 @@ struct hall {
 	string numberofseats;
 };
 hall halldata[100];
-//get hall data
-void retreivedata()
-{
-
-	int nameindx = 0;
-	int floorindx = 1;
-	int roomindx = 2;
-	int seatsindx = 3;
-	string temp1[100];
-	ifstream gethalldata;
-	gethalldata.open("halldata.txt");
-	if (gethalldata.fail())
-	{
-		cout << "error" << endl;
-	}
-	else
-	{
-		for (int i = 0; i < 100; i++)
-		{
-			getline(gethalldata, temp1[i]);
-		}
-		for (int i = 0; i < 100; i++)
-		{
-			if (temp1[i].empty())
-			{
-				break;
-			}
-			else
-			{
-				halldata[i].name = temp1[nameindx];
-				halldata[i].place.floor = temp1[floorindx];
-				halldata[i].place.room = temp1[roomindx];
-				halldata[i].numberofseats = temp1[seatsindx];
-				nameindx += 4;
-				floorindx += 4;
-				roomindx += 4;
-				seatsindx += 4;
-			}
-
-		}
-	}
-}
-//end hall data
-
 void addnewhall()
 {
 int sizeofarray=0 ;
-	string room;
+	int room;
 	string newhall;
 	
 	//bravo shatra 
@@ -91,11 +48,25 @@ int sizeofarray=0 ;
 			halldata[sizeofarray].name = newhall;
 			cout << "Enter the place" << endl << "Floor : ";
 			cin >> halldata[sizeofarray].place.floor;
+			if (halldata[sizeofarray].place.floor <= 0)
+			{
+				cout << "Error!Retry" << endl;
+				addnewhall();
+				break;
+			}
+
 			cout << endl << "Room : ";
 			cin >> room;
 			for (int k = 0; k < sizeofarray; k++)
 			{
-				if (halldata[k].place.room == room)
+				if (halldata[k].place.room <= 0)
+				{
+					cout << "Error!Retry." << endl;
+					addnewhall();
+					break;
+				}
+				
+				else if (halldata[k].place.room == room)
 				{
 					cout << "Sorry , this room is already reserved ,try again" << endl;
 					cout << "Room : ";
@@ -105,17 +76,11 @@ int sizeofarray=0 ;
 			//endloop
 			cout << "Enter number of seat (max 100) : ";
 			cin >> halldata[sizeofarray].numberofseats;
-			break;
+		
 		}
 	}
-	cout << "Data after addition " << endl;
-	for (int j = 0; j < sizeofarray+1; j++)
-	{
-		cout << "Name : " << halldata[j].name << endl;
-		cout << "Place:" << endl << "Floor:" << halldata[j].place.floor << endl ;
-		cout << "Room :" << halldata[j].place.room << endl;
-		cout << "Number of seats :" << halldata[j].numberofseats << endl << "***" << endl;
-	}
+
+	
 	system("pause");
 }
 
@@ -149,14 +114,7 @@ void removehall()
 		halldata[j].place.room = halldata[j + 1].place.room;
 		halldata[j].numberofseats = halldata[j + 1].numberofseats;
 	}
-	cout << "Data after removal" << endl;
-	for (int k = 0; k < sizeofarray-1; k++)
-	{
-		cout << "Name : " << halldata[k].name << endl;
-		cout << "Place:" << endl << "Floor:" << halldata[k].place.floor << endl;
-		cout << "Room :" << halldata[k].place.room << endl ;
-		cout << "Number off seats :" << halldata[k].numberofseats<< endl << "***" << endl ;
-	}
+	
 	system("pause");
 }
 
