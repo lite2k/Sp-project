@@ -1,0 +1,80 @@
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <ctime>
+using namespace std;
+struct hallsData
+{
+	string name;
+	string numberofseats;
+}halls[100];
+struct eventData
+{
+	int id;
+	string name, startDay, endday, startmonth, endmonth, year;
+	string Time;
+	string hallName;
+	int numberofavailableseats;
+};
+eventData eventsArr[100];
+void upcomingevents(int day,int month ,int year)
+{
+	system("cls");
+	int eventsNumber;
+	for (int i = 0; i < 100; i++)
+	{//this loop to know the number of events 
+		if (eventsArr[i].name.empty())
+		{
+			eventsNumber = i;
+			break;
+		}
+	}
+	eventData upcomingeventsarr[100];
+	int no=0,dayc,monthc,yearc;//number of upcoming events data
+	for (int i = 0; i < eventsNumber; i++)
+	{
+		stringstream d(eventsArr[i].startDay);
+		d >>  dayc ;
+		stringstream m(eventsArr[i].startmonth);
+		m >> monthc;
+		stringstream y(eventsArr[i].year);
+		y >> yearc;
+		if (yearc >= year)
+		{
+			if (monthc >= month)
+				if (dayc >= day)//why conditions in each other and not or or and because i need first to check year then month
+					upcomingeventsarr[no].id = eventsArr[i].id;//then day to compare data correctly
+					upcomingeventsarr[no].name = eventsArr[i].name;
+					upcomingeventsarr[no].startDay = eventsArr[i].startDay;
+					upcomingeventsarr[no].startmonth = eventsArr[i].startmonth;
+					upcomingeventsarr[no].year = eventsArr[i].year;
+					upcomingeventsarr[no].Time = eventsArr[i].Time;
+					upcomingeventsarr[no].endday = eventsArr[i].endday;
+					upcomingeventsarr[no].endmonth = eventsArr[i].endmonth;
+					upcomingeventsarr[no].hallName = eventsArr[i].hallName;
+					no++;
+		}
+	}
+	cout << "upcoming events is :" << no << endl; 
+	for (int i = 0; i < no ; i++)
+	{
+		cout << "event name is : " << upcomingeventsarr[i].name << endl;
+		cout << "event id is : " << upcomingeventsarr[i].id << endl;
+		cout << "event start day is : " << upcomingeventsarr[i].startDay << endl;
+		cout<< "event start month is : "<<upcomingeventsarr[i].startmonth<<endl;
+		cout << "event year is : " << upcomingeventsarr[i].year << endl;
+		cout << "event time is : " << upcomingeventsarr[i].Time << endl;
+		cout << "event end day is : " << upcomingeventsarr[i].endday << endl;
+		cout << "event end month is : " << upcomingeventsarr[i].endmonth << endl;
+		cout << "event hall name is : " << upcomingeventsarr[i].hallName << endl;
+	}
+}
+
+void main()
+{
+	cout << "please enter the date you want to see upcoming events after it"<<endl;
+	int day, month, year ;
+	cin >> day >> month >> year;
+	upcomingevents(day,month,year);
+	system("pause");
+}
