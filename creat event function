@@ -120,9 +120,9 @@ void eventInput(/*eventData eventsArr[100]*/)
 		for (int i = 0; i < 4; i++)
 		{
 			cout << i + 1 << "-" << eventTime[i] << endl;
-			cin >> choiceofeventTime;
 			eventsArr[eventsNumber].Time = eventTime[choiceofeventTime - 1];
 		}
+		cin >> choiceofeventTime;
 	}
 }
 int main()
