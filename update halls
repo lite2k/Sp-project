@@ -1,0 +1,208 @@
+#include<iostream>
+#include<fstream>
+#include<string>
+#include<fstream>
+using namespace std;
+struct hallplace {
+	int floor;
+	int room;
+};
+struct hall {
+	string name;
+	hallplace place;
+	string numberofseats;
+};
+hall halldata[100];
+//get hall data
+void retreivedata()
+{
+
+	int nameindx = 0;
+	int floorindx = 1;
+	int roomindx = 2;
+	int seatsindx = 3;
+	string temp1[100];
+	ifstream gethalldata;
+	gethalldata.open("halldata.txt");
+	if (gethalldata.fail())
+	{
+		cout << "error" << endl;
+	}
+	else
+	{
+		for (int i = 0; i < 100; i++)
+		{
+			getline(gethalldata, temp1[i]);
+		}
+		for (int i = 0; i < 100; i++)
+		{
+			if (temp1[i].empty())
+			{
+				break;
+			}
+			else
+			{
+				halldata[i].name = temp1[nameindx];
+				halldata[i].place.floor = temp1[floorindx];
+				halldata[i].place.room = temp1[roomindx];
+				halldata[i].numberofseats = temp1[seatsindx];
+				nameindx += 4;
+				floorindx += 4;
+				roomindx += 4;
+				seatsindx += 4;
+			}
+
+		}
+	}
+}
+//end hall data
+
+void addnewhall()
+{
+	bool checkrepeat = false;
+	bool checkdisplay = true;
+	int sizeofarray = 0;
+	string room;
+	string newhall;
+	//bravo shatra 
+	//loop el cnt to get size
+	for (int j = 0; j < 100; j++)
+	{
+		if (halldata[j].name.empty())
+		{
+			break;
+		}
+		else
+		{
+			sizeofarray++;
+		}
+	}
+	cout << "Enter hall's name : ";
+	
+		
+		for (int i = 0; !halldata[i].name.empty(); i++)
+		{
+			while (newhall.length()==0) //keep reading a new line when there is a blank line
+			getline(cin, newhall);
+				if (halldata[i].name == newhall)
+				{
+					cout << "Sorry , Hall's name already exsist,try again" << endl;
+					addnewhall();
+					break;
+				}
+
+				else {
+					halldata[sizeofarray].name = newhall;
+					cout << "Enter the place" << endl << "Floor : ";
+					cin >> halldata[sizeofarray].place.floor;
+					if (halldata[sizeofarray].place.floor  < 0 || halldata[sizeofarray].place.floor == 0)
+					{
+						cout << "Invalid data type.Retry" << endl;
+						addnewhall;
+						break;
+					}
+					cout << endl << "Room : ";
+					cin >> room;
+					if (room < 0 || room == 0)
+					{
+						cout << "Invalid data type.Retry" << endl;
+						addnewhall;
+						break;
+					}
+					for (int k = 0; k < sizeofarray; k++)
+					{
+						if (halldata[k].place.room == room)
+						{
+							cout << "Sorry , this room is already reserved ,try again" << endl;
+							cout << "Room : ";
+							cin >> halldata[sizeofarray].place.room;
+						}
+						else
+						{
+							halldata[sizeofarray].place.room = room;
+						}
+					}
+					//endloop
+					cout << "Enter number of seat (max 100) : ";
+					cin >> halldata[sizeofarray].numberofseats;
+					cout << "Addition done" << endl;
+					checkdisplay = false;
+					break;
+
+				}
+			
+			
+				
+		}
+
+	if (checkdisplay == false)
+	{
+		cout << "*New data*" << endl;
+		for (int y = 0; y <= sizeofarray; y++)
+		{
+			cout << "Name : " << halldata[y].name << endl;
+			cout << "Place : " << endl << "Floor : " << halldata[y].place.floor << endl;
+			cout << "Room : " << halldata[y].place.room << endl;
+			cout << "N of seats : " << halldata[y].numberofseats << endl;
+			cout << "*************" << endl;
+		}
+
+		system("pause");
+	}
+
+}
+
+
+
+
+void removehall()
+{
+	int sizeofarray = 0;
+	for (int j = 0; j < 100; j++)
+	{
+		if (halldata[j].name.empty())
+		{
+			break;
+		}
+		else
+		{
+			sizeofarray++;
+		}
+	}
+	int removalindex;
+	for (int g = 0; g < sizeofarray; g++)
+	{
+		cout << g + 1 << '-' << halldata[g].name << endl ;
+	}
+	cout << "Choose number of the hall to be removed : " << endl;
+	cin >> removalindex;
+	for (int j = removalindex-1 ; !halldata[j].name.empty() ; j++)
+	{
+		halldata[j].name = halldata[j + 1].name;
+		halldata[j].place.floor = halldata[j + 1].place.floor;
+		halldata[j].place.room = halldata[j + 1].place.room;
+		halldata[j].numberofseats = halldata[j + 1].numberofseats;
+	}
+	cout << "Removal done successfully." << endl;
+	
+	
+	system("pause");
+}
+
+int main()
+{
+	retreivedata();
+	char user;
+	cout << "Do you want to add or remove hall?(a/r) ";
+	cin >> user;
+	if (user == 'a')
+	{
+		addnewhall();
+	}
+	else if (user == 'r')
+	{
+		removehall();
+	}
+	return 0;
+	system("pause");
+}
