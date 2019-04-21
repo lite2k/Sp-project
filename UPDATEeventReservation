@@ -1,0 +1,98 @@
+#include<iostream>
+#include<string>
+#include<fstream>
+#include<sstream>
+using namespace std;
+struct date {
+	string day;
+	string year;
+	string month;
+};
+struct events {
+	string name;
+	string evinhall;
+	string id;
+	date startdate;
+	string starttime;
+	string endtime;
+	int evseats;
+};
+struct currentuser
+{
+	string username;
+	string eventid[100];
+};
+currentuser reserver;
+bool checkevents = false; //flag to know wether the event is already reserved
+events eventdata[100];
+
+void eventreservation()
+{
+	int sizeofarray = 0;
+	for (int j = 0; j < 100; j++)
+	{
+		if (eventdata[j].name.empty())
+		{
+			break;
+		}
+		else
+		{
+			sizeofarray++;
+		}
+	}
+		
+	cout << "Select the event you want to reserve : " << endl;
+	int index = 1;
+	for (int i = 0; i < sizeofarray; i++)
+	{
+		    cout << index << '-';
+			index++;
+			cout << eventdata[i].name << endl;		
+	}
+	int choice; 
+	cin >> choice;
+	if (cin.fail())
+	{
+		cout << "Error!Retry." << endl;
+		cin.clear();
+		cin.ignore();
+		eventreservation();
+	}
+	else
+	{
+		if (choice < index && choice > 0)
+
+		{
+			for (int h = 0; h < sizeofarray; h++)
+			{
+				if (reserver.eventid[h] == eventdata[h].id)
+				{
+					cout << "Already reserved." << endl;
+					checkevents = true;
+					break;
+				}
+
+			}
+			if (checkevents == false)
+			{
+				reserver.eventid[sizeofarray] = eventdata[choice - 1].id;
+				cout << "Reservation done successfully!" << endl;
+				
+			}
+		}
+		else
+		{
+			cout << "Error!Retry." << endl;
+			eventreservation();
+
+		}
+	}
+}
+int main()
+{
+
+	eventreservation();
+	
+	system("pause");
+	return 0;
+}
