@@ -1,0 +1,108 @@
+#include<iostream>
+#include<string>
+#include<fstream>
+#include<sstream>
+#include<cctype>
+using namespace std;
+struct date {
+	string day;
+	string year;
+	string month;
+};
+struct shows {
+	string name;
+	string id;
+	string evinhall;
+	date startdate;
+	date enddate;
+	string starttime;
+	string endtime;
+	int seats;
+};
+struct currentuser
+{
+	string username;
+	string showid[100];
+};
+currentuser reserver;
+shows showdata[100];
+
+bool checkshows = false;
+void showreservation()
+{
+	int sizeofarray = 0;
+	for (int j = 0; j < 100; j++)
+	{
+		if (showdata[j].name.empty())
+		{
+			break;
+		}
+		else
+		{
+			sizeofarray++;
+		}
+	}
+
+	cout << "Select the show you want to reserve : " << endl;
+	int index=1;
+	for (int i = 0; i < sizeofarray; i++)
+	{
+		if (showdata[i].seats < 100)
+		{
+			cout << index << '-';
+			cout << showdata[i].name << endl;
+			index++;
+		}
+		else
+		{
+			continue;
+		}
+
+		
+	}
+	int choice;
+	cin >> choice;
+	if (cin.fail())
+	{
+		cout << "Error!Retry." << endl;
+		cin.clear();
+		cin.ignore();
+		showreservation();
+	}
+		else
+		{
+		if (choice < index && choice > 0)
+		{
+			for (int h = 0; h < sizeofarray; h++)
+			{
+				if (reserver.showid[h] == showdata[h].id)
+				{
+					cout << "Already reserved." << endl;
+					checkshows = true;
+					break;
+				}
+
+			}
+			if (checkshows == false)
+			{
+				reserver.showid[sizeofarray] = showdata[choice - 1].id;
+				cout << "Reservation done successfully!" << endl;
+
+			}
+		}
+	else
+	{
+		cout << "Error!Retry." << endl;
+		showreservation();
+	}
+		}
+	
+}
+int main()
+{
+	geteventdata();
+	showreservation();
+
+	system("pause");
+	return 0;
+}
