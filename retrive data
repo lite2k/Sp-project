@@ -1,0 +1,329 @@
+#include<iostream>
+#include<fstream>
+#include<ctime>
+#include<sstream>
+#include<string>
+using namespace std;
+
+struct userdata {
+	string username;
+	string password;
+	string allids[100];
+};
+struct hallplace {
+	int floor;
+	int room;
+};
+struct hall {
+	string name;
+	hallplace place;
+	string numberofseats;
+	string events_shows[100];
+};
+//update
+struct date {
+	int day;
+	int year;
+	int month;
+};
+struct events {
+	string name;
+	string evinhall;
+	string id;
+	date startdate;
+	date enddate;
+	string starttime;
+	string endtime;
+};
+struct shows {
+	string name;
+	string showinhall;
+	string id;
+	date startdate;
+	date enddate;
+	string starttime;
+	string endtime;
+	int showseats;
+};
+struct currentusers {
+	string username;
+	string password;
+	string reservationid[100];
+	string eventid[100];
+	string showid[100];
+};
+
+currentusers user;
+hall halldata[100];
+events eventdata[100];
+shows showdata[100];
+userdata users[100];
+bool admin = false;
+//updated
+void retrive_data()
+{
+	//start of getting user data from file
+	int usernameindx = 0;
+	int paasswordindx = 1;
+	string temp[1000];
+	ifstream getuserdata;
+	getuserdata.open("userdata.txt");
+	if (getuserdata.fail()) {
+		cout << "error" << endl;
+	}
+	else {
+		for (int i = 0; i < 1000; i++)
+		{
+			getline(getuserdata, temp[i]);
+		}
+		for (int i = 0; !temp[i].empty(); i++)
+		{
+			users[i].username = temp[usernameindx];
+			users[i].password = temp[paasswordindx];
+			usernameindx += 2;
+			paasswordindx += 2;
+
+		}
+
+	}
+	getuserdata.close();
+	//end of getting userdata from file
+	//---------------------------------------------------------------------------------
+	//start of getting all halls data without events
+	int nameindx = 0;
+	int floorindx = 1;
+	int roomindx = 2;
+	int seatsindx = 3;
+	string temp1[1000];
+	ifstream gethalldata;
+	gethalldata.open("halldata.txt");
+	if (gethalldata.fail())
+	{
+		cout << "error" << endl;
+	}
+	else
+	{
+		for (int i = 0; i < 1000; i++)
+		{
+			getline(gethalldata, temp1[i]);
+		}
+
+		for (int i = 0; !temp1[i].empty(); i++)
+		{
+			halldata[i].name = temp1[nameindx];
+
+			stringstream floor_to_int(temp1[floorindx]);
+			floor_to_int >> halldata[i].place.floor;
+
+			stringstream room_to_int(temp1[roomindx]);
+			room_to_int >> halldata[i].place.room;
+
+			halldata[i].numberofseats = temp1[seatsindx];
+			nameindx += 4;
+			floorindx += 4;
+			roomindx += 4;
+			seatsindx += 4;
+
+
+		}
+	}
+	gethalldata.close();
+	//end hall data
+	//-----------------------------------------
+	//start event data retrive
+	int name = 0;
+	int evinhallindx = 1;
+	int idindx = 2;
+	int dayindx = 3;
+	int monthindx = 4;
+	int yearindx = 5;
+	int day1indx = 6;
+	int month1indx = 7;
+	int year1indx = 8;
+	int stime = 9;
+	int etime = 10;
+	string tempev[1000];
+	ifstream geteventdata;
+	geteventdata.open("eventdata.txt");
+	if (geteventdata.fail())
+	{
+		cout << "error" << endl;
+		system("pause");
+	}
+	else
+	{
+		for (int i = 0; i < 1000; i++)
+		{
+			getline(geteventdata, tempev[i]);
+		}
+		for (int i = 0; !tempev[i].empty(); i++)
+		{
+
+			eventdata[i].name = tempev[name];
+			eventdata[i].evinhall = tempev[evinhallindx];
+			eventdata[i].id = tempev[idindx];
+
+			stringstream day_to_int(tempev[dayindx]);
+			day_to_int >>eventdata[i].startdate.day;
+			stringstream month_to_int(tempev[monthindx]);
+			month_to_int >> eventdata[i].startdate.month;
+			stringstream year_to_int(tempev[yearindx]);
+			year_to_int >> eventdata[i].startdate.year;
+
+			stringstream eday_to_int(tempev[day1indx]);
+			eday_to_int >> eventdata[i].enddate.day;
+			stringstream emonth_to_int(tempev[month1indx]);
+			emonth_to_int >> eventdata[i].enddate.month;
+			stringstream eyear_to_int(tempev[year1indx]);
+			eyear_to_int >> eventdata[i].enddate.year;
+
+			eventdata[i].starttime = tempev[stime];
+			eventdata[i].endtime = tempev[etime];
+
+			name += 11;
+			evinhallindx += 11;
+			idindx += 11;
+			monthindx += 11;
+			yearindx += 11;
+			day1indx += 11;
+			month1indx += 11;
+			year1indx += 11;
+			stime += 11;
+			etime += 11;
+
+
+		}
+	}
+	geteventdata.close();
+	//end event data 
+	//-----------------------------
+	//start shows data
+	int nameindex = 0;
+	int showinhallindex = 1;
+	int idindex = 2;
+	int dayindex = 3;
+	int monthindex = 4;
+	int yearindex = 5;
+	int day1index = 6;
+	int month1index = 7;
+	int year1index = 8;
+	int stime1 = 9;
+	int etime1 = 10;
+	int seats = 11;
+	string tempshow[1000];
+	ifstream getshowdata;
+	getshowdata.open("showdata.txt");
+	if (getshowdata.fail())
+	{
+		cout << "error" << endl;
+	}
+	else
+	{
+		for (int i = 0; i < 1000; i++)
+		{
+			getline(getshowdata, tempshow[i]);
+		}
+		for (int i = 0; !tempshow[i].empty(); i++)
+		{
+
+
+			showdata[i].name = tempshow[nameindex];
+			showdata[i].showinhall = tempshow[showinhallindex];
+			showdata[i].id = tempshow[idindex];
+			
+			stringstream day1_to_int(tempshow[dayindex]);
+			day1_to_int >> showdata[i].startdate.day;
+			stringstream month1_to_int(tempshow[monthindex]);
+			month1_to_int >> showdata[i].startdate.month;
+			stringstream year1_to_int(tempshow[yearindex]);
+			year1_to_int >> showdata[i].startdate.year;
+
+			stringstream eday1_to_int(tempshow[day1index]);
+			eday1_to_int >> showdata[i].enddate.day;
+			stringstream emonth1_to_int(tempshow[month1index]);
+			emonth1_to_int >> showdata[i].enddate.month;
+			stringstream eyear1_to_int(tempshow[year1index]);
+			eyear1_to_int >> showdata[i].enddate.year;
+
+			showdata[i].starttime = tempshow[stime1];
+			showdata[i].endtime = tempshow[etime1];
+			stringstream seats_to_int(tempshow[seats]);
+			seats_to_int >> showdata[i].showseats;
+
+			nameindex += 12;
+			showinhallindex += 12;
+			idindex += 12;
+			dayindex += 12;
+			monthindex += 12;
+			yearindex += 12;
+			day1index += 12;
+			month1index += 12;
+			year1index += 12;
+			stime1 += 12;
+			etime1 += 12;
+			seats += 12;
+
+		}
+	}
+	getshowdata.close();
+	//end show data
+	//------------------------------------------------
+	//start user reserved event's id
+	ifstream getreseventid;
+	string idinfile[1000];
+	int cntt = 0;
+	for (int i = 0; !users[i].username.empty(); i++)
+	{
+		string userfile;
+		userfile = users[i].username + ".txt";
+		getreseventid.open(userfile.c_str());
+		if (getreseventid.fail())
+		{
+			cout << "error" << endl;
+		}
+		else
+		{
+			for (int j = 0; !getreseventid.eof(); j++)
+			{
+				getline(getreseventid, idinfile[j]);
+			}
+		}
+		for (int j = 0; !idinfile[j].empty(); j++)
+		{
+
+			users[i].allids[j] = idinfile[j];
+
+		}
+		getreseventid.close();
+	}
+	//end user reserved event's id
+	//---------------------------------------
+	//start hall reserved event's name
+	ifstream geteventinhall;
+	string eventinhall[1000];
+	for (int i = 0; !halldata[i].name.empty(); i++)
+	{
+
+		string hallfile;
+		hallfile = halldata[i].name + ".txt";
+		geteventinhall.open(hallfile.c_str());
+		if (geteventinhall.fail())
+		{
+			cout << "error" << endl;
+		}
+		else
+		{
+			for (int j = 0; !geteventinhall.eof(); j++)
+			{
+				getline(geteventinhall, eventinhall[j]);
+			}
+		}
+		for (int j = 0; !eventinhall[j].empty(); j++)
+		{
+			halldata[i].events_shows[j] = eventinhall[j];
+		}
+		geteventinhall.close();
+
+	}
+
+}

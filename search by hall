@@ -1,0 +1,57 @@
+#include <iostream>
+#include <string>
+#include<fstream>
+using namespace std;
+struct hallplace 
+{
+	string floor;
+	string room;
+};
+struct hall
+{
+	string name;
+	hallplace place;
+	string numberofseats;
+	string listofevents[100];
+}  ;
+hall halldata[100];
+void searchbyhall()
+{
+	string hallname;
+	cout << "Enter hall name :" << endl;
+	getline(cin,hallname);
+	for (int i = 0; i < 100; i++)
+	{
+		if (hallname == halldata[i].name)
+		{
+			cout << "hall name :" << halldata[i].name << endl;
+			cout << "floor :" << halldata[i].place.floor << endl;
+			cout << "room :" << halldata[i].place.room << endl;
+			cout << "Number of seats :" << halldata[i].numberofseats << endl;
+			cout << "list of events :" << endl;
+
+			int count = 0;
+			if (halldata[i].listofevents[i].empty())
+			{
+				count++;
+			}
+			for (int j = 0; j < count; j++)
+			{
+				cout << halldata[i].listofevents[j] << endl;
+			}
+			break;
+		}
+		else 
+		{
+			system("cls");
+			cout << "Invalied Name!" << endl;
+			searchbyhall();
+		}
+	}
+	
+}
+int main() {
+	searchbyhall();
+	system("pause");
+	return 0;
+}
