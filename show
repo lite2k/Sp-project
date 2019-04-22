@@ -1,0 +1,166 @@
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <ctime>
+using namespace std;
+struct hallsData
+{
+	string name;
+	string numberofseats;
+}halls[100];
+
+struct date {
+	int day;
+	int year;
+	int month;
+};
+
+struct shows {
+	string name;
+	string showinhall;
+	string id;
+	date startdate;
+	date enddate;
+	string Time;
+	int showseats;
+};
+shows showdata[100];
+void showinput()
+{
+	int showsNumber;
+	for (int i = 0; i < 100; i++)
+	{//this loop to know the number of show
+		if (showdata[i].name.empty())
+		{
+			showsNumber = i;
+			break;
+		}
+	}
+	// this array contain the time of shows which are fixed and allow user to choose between them 
+	string timeReserved[4], timetobereserved[4], showTime[4] = { "12:00 to 2:00","2:00 to 4:00", "4:00 to 6:00" ,"6:00 to 8:00" };
+	cin.ignore();//to avoid errors with getline with string 
+	srand(time(NULL));// to creat random id related with time that will not repeat
+	showdata[showsNumber].id = rand();
+	cout << "enter show name :";
+	getline(cin, showdata[showsNumber].name);
+	for (int i = 0; i < showsNumber; i++)// loop to check if the same name already exist or not to avoid repeating the same event 
+	{
+		if (showdata[i].name == showdata[showsNumber].name)
+		{
+			cout << "show already exist" << endl;
+			system("pause");
+			system("cls");
+			showdata[showsNumber].name.clear();// to back this index with value zero to avoid empty data in array
+			showinput();
+		}
+	}
+	cout << endl << "enter start date day month year" << endl;
+	cin >> showdata[showsNumber].startdate.day >> showdata[showsNumber].startdate.month >> showdata[showsNumber].startdate.year;
+	cout << endl << "enter end date day month year" << endl;
+	cin >> showdata[showsNumber].enddate.day >> showdata[showsNumber].enddate.month >> showdata[showsNumber].enddate.year;
+	cout << "choose hall which you want by number" << endl;
+	int hallsNumber;
+	for (int i = 0; i < 100; i++)
+	{
+		if (halls[i].name.empty())
+		{
+			hallsNumber = i;
+			break;
+		}
+	}//loop to show halls name to allow user to choose name of hall
+	for (int i = 0; i < hallsNumber; i++)
+	{
+		cout << i + 1 << halls[i].name << endl;
+
+	}
+	int choice;
+	cin >> choice;
+	showdata[showsNumber].showinhall = halls[choice - 1].name;
+			//why choice -1 to acess the needed index
+	stringstream seats(halls[choice - 1].numberofseats);
+	seats >> showdata[showsNumber].showseats;
+	cout << endl << "choose time of show" << endl;
+	bool reserved = true;
+	int choiceofshowTime, cnt1 = 0, cnt2 = 0;
+	//this loop to check researving more than one show in the same place at same time
+	for (int i = 0; i < showsNumber; i++)
+	{
+		if (showdata[showsNumber].showinhall == showdata[i].showinhall && showdata[i].startdate.year == showdata[showsNumber].startdate.year && showdata[i].startdate.month == showdata[showsNumber].startdate.month && showdata[i].startdate.day == showdata[showsNumber].startdate.day)
+		{//why so many arrays? to take all the times that is actually researved and compare all the researved shows
+			for (int j = 0; j < 4; j++)
+			{
+				if (showTime[j] == showdata[i].Time)
+				{ 
+					timeReserved[cnt1] = showTime[j];
+					cnt1++;
+				}
+			}
+			reserved = false;
+		}
+	}
+	if (reserved == false) {
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < cnt1; j++)
+			{
+				if (timeReserved[j] != showTime[i])
+				{
+					// if time is not researved then it will be added to this array 
+					//to display only available times
+					timetobereserved[cnt2] = showTime[i];
+					cnt2++;
+					break;
+				}
+			}
+		}
+		// this condition to check if there is a researvation exist in this day
+		if (cnt2 > 0)
+		{
+			for (int i = 0; i < cnt2; i++)
+			{
+
+				cout << i + 1 << timetobereserved[i] << endl;
+			}
+			cin >> choiceofshowTime;
+			showdata[showsNumber].Time = timetobereserved[choiceofshowTime - 1];
+		}
+		else
+		{
+			cout << "no available time in this day" << endl;
+			showinput();
+
+		}
+	}
+	// if there is no researvation in this day then it will display all the times
+	if (reserved == true)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			cout << i + 1 << "-" << showTime[i] << endl;
+		}
+			cin >> choiceofshowTime;
+			showdata[showsNumber].Time = showTime[choiceofshowTime - 1];
+	}
+}
+int main()
+{
+	char answer;
+	do //to take reply from user & allow the user to add more than a show if he want 
+	{
+		cout << "Do you want to add show y or n ?" << endl;
+		cin >> answer;
+		if (answer == 'y' || answer == 'Y')
+		{
+
+			showinput();
+			system("cls");
+		}
+		else if (answer == 'n' || answer == 'N')
+		{
+			cout << "thanks \n";
+			break;
+		}
+	} while (answer != 'y' || answer != 'n' || answer != 'Y' || answer != 'N');
+	system("pause");
+	return 0;
+}
