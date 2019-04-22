@@ -1,0 +1,76 @@
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <ctime>
+using namespace std;
+struct hallsData
+{
+	string name;
+	string numberofseats;
+}halls[100];
+struct date {
+	int day;
+	int year;
+	int month;
+};
+struct event
+{
+	int id;
+	string name;
+	date startdate ,enddate;
+	string Time;
+	string hallName;
+	int numberofavailableseats;
+};
+event eventdata[100];
+void upcomingevents(int day,int month ,int year)
+{
+	system("cls");
+	int eventsNumber;
+	for (int i = 0; i < 100; i++)
+	{//this loop to know the number of events 
+		if (eventdata[i].name.empty())
+		{
+			eventsNumber = i;
+			break;
+		}
+	}
+	cout << "upcoming events is :" << endl; 
+	int no=0,dayc,monthc,yearc;//number of upcoming events data
+	for (int i = 0; i < eventsNumber; i++)
+	{
+		stringstream d(eventdata[i].startdate.dayay);
+		d >>  dayc ;
+		stringstream m(eventdata[i].startdate.month);
+		m >> monthc;
+		stringstream y(eventdata[i].startdate.year);
+		y >> yearc;
+		if (yearc >= year)
+		{
+			if (monthc >= month)
+				if (dayc >= day)//why conditions in each other and not or or and because i need first to check year then month
+
+					//then day to compare data correctly
+					cout << "event name is : " << eventdata[i].name << endl;
+			cout << "event id is : " << eventdata[i].id<< endl;
+			cout << "event start day is : " << eventdata[i].startdate.day << endl;
+			cout << "event start month is : " << eventdata[i].startdate.month << endl;
+			cout << "event year is : " << eventdata[i].startdate.year << endl;
+			cout << "event time is : " << eventdata[i].Time << endl;
+			cout << "event end day is : " << eventdata[i].enddate.day << endl;
+			cout << "event end month is : " << eventdata[i].enddate.month << endl;
+			cout << "event end year is : " << eventdata[i].enddate.year << endl;
+			cout << "event hall name is : " << eventdata[i].hallName << endl;
+		}
+	}
+	
+}
+
+void main()
+{
+	cout << "please enter the date you want to see upcoming events after it"<<endl;
+	int day, month, year ;
+	cin >> day >> month >> year;
+	upcomingevents(day,month,year);
+	system("pause");
+}
