@@ -1,4 +1,4 @@
-# Sp-project
+
 #include < iostream>
 #include < string>
 using namespace std;
@@ -26,14 +26,14 @@ struct userdate
 struct currentuser {
 	string username;
 	string showid[100];
-	
-};
-currentuser userd;
+}cuser;
+ 
 void cancelshow() {
-	int counter1 = 0, counter2 = 0;    // the actual  array elemnts 
+	int counter1 = 0,  // the actual  array elemnts  user showid
+	int counter2 = 0;    // the actual  array elemnts  shoe id 
 	for (int i = 0; i < 100; i++)
 	{
-		if (userd.showid->empty())
+		if (cuser.showid[i].empty())
 		{
 			break;
 		}
@@ -55,7 +55,7 @@ void cancelshow() {
 	{
 		for (int j = 0; j < counter2; j++)
 		{
-			if (userd.showid[i] == shows[j].id)
+			if (cuser.showid[i] == shows[j].id)
 			{
 				cout << i + 1 << ":" << shows[j].name << endl;
 				break;
@@ -65,16 +65,20 @@ void cancelshow() {
 	cout << " Select the show you want to cancel " << endl;
 	int choice;
 	cin >> choice;
-	for (int j = 0; j < counter2; j++)                 // increase num  of show seat 
+	for (int i = 0; i < counter1; i++)               // show the reserved shows 
 	{
-		if (userd.showid[choice - 1] == shows[j].id)
+		for (int j = 0; j < counter2; j++)
 		{
-			shows[j].seats++;
+			if (cuser.showid[i] == shows[j].id)
+			{
+				cout << i + 1 << ":" << shows[j].name << endl;
+				break;
+			}
 		}
 	}
-	for (int i = choice - 1; i < counter1 - 2; i++)     //  del the showid 
+	for (int i = choice - 1;  !shows[i].name.empty(); i++)     //  del the showid 
 	{
-		userd.showid[i] = userd.showid[i + 1];
+		cuser.showid[i] = cuser.showid[i + 1];
 	}
 }
 int main()
@@ -83,3 +87,5 @@ int main()
 	system("pause");
 	return 0;
 }
+
+ 
