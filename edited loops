@@ -1,0 +1,43 @@
+	NOTE : change (remid) into (evremid) //id of events and add another variable named (shremid) //id of shows , balyz
+  
+  for (int a = 0; !showdata[a].name.empty(); a++)
+		{
+			if (showdata[a].showinhall == halldata[removalindex - 1].name) //nafs elesm
+			{
+				showdata[a].id = shremid;
+				
+				for (int m = a; !eventdata[m].name.empty(); m++)
+				{
+					showdata[m].name = showdata[m + 1].name;
+					showdata[m].showinhall = showdata[m + 1].showinhall;
+					showdata[m].id = showdata[m + 1].id;
+					showdata[m].startdate = showdata[m + 1].startdate;
+					showdata[m].enddate = showdata[m + 1].enddate;
+					showdata[m].time = showdata[m + 1].time;
+					showdata[m].showseats = showdata[m + 1].showseats;
+				}
+			}
+		}
+		for (int q = 0; !users[q].username.empty(); q++)
+		{
+			for (int y = 0; !users[q].allids[y].empty(); y++) 
+			{
+				if ( evremid == users[q].allids[y] )
+				{
+					
+					for (int k = y; !users[q].allids[k].empty(); k++)
+					{
+						users[q].allids[k] = users[q].allids[k + 1];
+					}
+				}
+				else if (shremid == users[q].allids[y])
+				{
+
+					for (int k = y; !users[q].allids[k].empty(); k++)
+					{
+						users[q].allids[k] = users[q].allids[k + 1];
+					}
+				}
+
+			}
+		}
