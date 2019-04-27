@@ -1,40 +1,36 @@
-# Sp-project
 #include <iostream>
 #include <string>
-using namespace std;
-struct date
-{
+using namespace std; 
+struct date {
 	string day;
+	string year;
 	string month;
-	string  year;
 };
-
-struct eventdate
+struct events
 {
-	string eventname;
+	string name;
+	string evinhall;
 	string id;
-	string place;
-	string starttine;
-	string enddate;
-}events[100];
-struct userdate
+	date startdate;
+	string starttime;
+	string endtime;
+	int evseats;
+} eventdata[100];
+struct currentuser
 {
 	string username;
-	string password;
+
 	string eventid[100];
-} user[100];
-struct currentuser {
-	string username;
-	string evnetid[100];
-};
-currentuser userx;
-void cancelreservation()
-{
-	int count1 = 0, count2 = 0;               // the actual elements of array
+}  curuser;
+// start of the function
+void canceleventreservation() {
+	system("cls");
+	int count1 = 0,              // the actual elements of array  user event id
+		int count2 = 0;               // the actual elements of array events  id 
 	for (int i = 0; i < 100; i++)     // identifay the eventid  of user
 	{
 
-		if (userx.evnetid[i].empty());
+		if (curuser.eventid[i].empty())
 		{
 			break;
 		}
@@ -44,7 +40,7 @@ void cancelreservation()
 	}
 	for (int j = 0; j < 100; j++)       // identifay  the eventid of events 
 	{
-		if (events[j].id.empty());
+		if (eventdata[j].id.empty());
 		{
 			break;
 		}
@@ -56,25 +52,25 @@ void cancelreservation()
 	{
 		for (int j = 0; j < count2; j++)
 		{
-			if (userx.evnetid[i] == events[j].id)
+			if (curuser.eventid[i] == eventdata[j].id)
 			{
-				cout << i+1 << ":"  << events[j].eventname << endl;
+				cout << i + 1 << ":" << eventdata[j].name << endl;
 				break;
 			}
 		}
 	}
-	cout << " Select the event you want to cancel " << endl; 
-	int choice; 
-	cin >> choice; 
-	for (int i = choice -1 ; i < count1-2 ; i++)
+	cout << " Select the event you want to cancel " << endl;
+	int choice;
+	cin >> choice;
+	for (int j = choice - 1; !eventdata[j].name.empty(); j++)
 	{
-		userx.evnetid[i] = userx.evnetid[i + 1];
+		curuser.eventid[j] = curuser.eventid[j + 1];
 	}
 }
-int main()
-{
+	int main()
+	{
 
-	cancelreservation();
-	system("pause");
-	return 0;
-}
+		canceleventreservation();
+		system("pause");
+		return 0;
+	}
