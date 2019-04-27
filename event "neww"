@@ -1,0 +1,195 @@
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <ctime>
+using namespace std;
+struct halls
+{
+	string name;
+	string events_shows[100];
+};
+ halls hallsdata[100];
+struct date {
+	int day;
+	int year;
+	int month;
+};
+
+struct event
+{
+	int id;
+	string name;
+	date	startdate, enddate;
+	string Time;
+	string evinhall;
+};
+
+struct shows {
+	string name;
+	string showinhall;
+	string id;
+	date startdate;
+	date enddate;
+	string Time;
+	int showseats;
+};
+shows showdata[100];
+event eventdata[100];
+void eventInput()
+{
+	int eventsNumber;
+	for (int i = 0; i < 100; i++)
+	{//this loop to know the number of events 
+		if (eventdata[i].name.empty())
+		{
+			eventsNumber = i;
+			break;
+		}
+	}
+	// this array contain the time of events which are fixed and allow user to choose between them 
+	int showsNumber;
+	for (int i = 0; i < 100; i++)
+	{//this loop to know the number of show
+		if (showdata[i].name.empty())
+		{
+			showsNumber = i;
+			break;
+		}
+	}
+
+	string timeReserved[4], timetobereserved[4], eventTime[4] = { "12:00 to 2:00","2:00 to 4:00",
+		"4:00 to 6:00" ,"6:00 to 8:00" };
+	cin.ignore();//to avoid errors with getline with string 
+	srand(time(NULL));// to creat random id related with time that will not repeat
+	eventdata[eventsNumber].id = rand();
+	cout << "enter event name :";
+	getline(cin, eventdata[eventsNumber].name);
+	for (int i = 0; i < eventsNumber; i++)
+		// loop to check if the same name already exist or not to avoid repeating the same event 
+	{
+		if (eventdata[i].name == eventdata[eventsNumber].name)
+		{
+			cout << "event already exist" << endl;
+			system("pause");
+			system("cls");
+			eventdata[eventsNumber].name.clear();// to back this index with zero to avoid empty data in array
+			eventInput();
+		}
+	}
+	cout << endl << "enter start date day month year" << endl;
+	cin >> eventdata[eventsNumber].startdate.day >> eventdata[eventsNumber].startdate.month;
+	cin >> eventdata[eventsNumber].startdate.year;
+	cout << endl << "enter end date day month year" << endl;
+	cin >> eventdata[eventsNumber].enddate.day >> eventdata[eventsNumber].enddate.month;
+	cin >> eventdata[eventsNumber].enddate.year;
+	cout << "choose hall which you want by number" << endl;
+	int hallsNumber;
+   // hallsdata[0].name = { "a"};
+	for (int i = 0; i < 100; i++)
+	{
+		if (hallsdata[i].name.empty())
+		{
+			hallsNumber = i;
+			break;
+		}
+	}//loop to show halls name to allow user to choose name of hall
+	for (int i = 0; i < hallsNumber; i++)
+	{
+		cout << i + 1 << " " << hallsdata[i].name << endl;
+
+	}
+
+	int choice;
+	cin >> choice;
+	eventdata[eventsNumber].evinhall = hallsdata[choice - 1].name;
+	cout << endl << "choose time of event" << endl;
+	bool reserved = true;
+	int choiceofeventTime, cnt1 = 0, cnt2 = 0;
+
+	bool time[4] = { true,true,true,true };
+	//compare time researved in events
+	for (int i = 0;i < eventsNumber; i++)
+	{
+
+		if 
+		(
+		eventdata[i].evinhall == eventdata[eventsNumber].evinhall
+		&& eventdata[i].startdate.year == eventdata[eventsNumber].startdate.year 
+		&& eventdata[i].enddate.year == eventdata[eventsNumber].enddate.year 
+		&& eventdata[i].startdate.month == eventdata[eventsNumber].startdate.month 
+		&& eventdata[i].startdate.day == eventdata[eventsNumber].startdate.day
+	    )
+		{
+			for (int j = 0; j < 4; j++)
+			{
+
+				if (eventdata[i].Time == eventTime[j])
+				{
+					time[j] = false;
+					//cout << eventTime[j] << " " << "Reserved\n";
+				}
+			}
+		}
+	}
+	//compare shows researved time
+	for (int i = 0; i < showsNumber; i++)
+	{
+
+		if 
+		(
+			showdata[i].showinhall == eventdata[eventsNumber].evinhall 
+			&& showdata[i].startdate.year == eventdata[eventsNumber].startdate.year 
+			&& showdata[i].enddate.year == eventdata[eventsNumber].enddate.year 
+			&& showdata[i].startdate.month == eventdata[eventsNumber].startdate.month 
+			&& showdata[i].startdate.day == eventdata[eventsNumber].startdate.day
+		)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+
+				if (showdata[i].Time == eventTime[j])
+				{
+					time[j] = false;
+					//cout << eventTime[j] << " " << "Reserved\n";
+				}
+			}
+
+		}
+	}
+	cout << "please choose number of time u want \n";
+	for (int  i = 0; i < 4 ; i++)
+	{
+		if (time[i])
+		{
+			cout << i+1 << " " << eventTime[i] << endl;
+		}
+		else {
+			cout << i+1 << " "<<  eventTime[i] << " Reserved " << endl;
+		}
+	}
+	cin >> choiceofeventTime ;
+	eventdata[eventsNumber].Time = eventTime[choiceofeventTime - 1];
+}
+
+int main()
+{
+	char answer;
+	do //to take reply from user & allow the user to add more than an event if he want 
+	{
+		cout << "Do you want to add event y or n ?" << endl;
+		cin >> answer;
+		if (answer == 'y' || answer == 'Y')
+		{
+
+			eventInput(/*eventsArr*/);
+			system("cls");
+		}
+		else if (answer == 'n' || answer == 'N')
+		{
+			cout << "thanks \n";
+			break;
+		}
+	} while (answer != 'y' || answer != 'n' || answer != 'Y' || answer != 'N');
+	system("pause");
+	return 0;
+}
