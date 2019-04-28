@@ -1,0 +1,165 @@
+# Sp-project
+#include <iostream>
+#include <string>
+#include<fstream>
+#include<sstream>
+#include <ctime>
+using namespace std;
+struct userdata {
+	string username;
+	string password;
+	string allids[100];
+};
+struct hallplace {
+	int floor;
+	int room;
+};
+struct hall {
+	string name;
+	hallplace place;
+	int numberofseats;
+	string events_shows[100];
+	string events[100];
+	string shows[100];
+};
+struct date {
+	int day;
+	int year;
+	int month;
+};
+struct events {
+	string name;
+	string evinhall;
+	string id;
+	date startdate;
+	date enddate;
+	string time;
+};
+struct shows {
+	string name;
+	string showinhall;
+	string id;
+	date startdate;
+	date enddate;
+	string time;
+	int showseats;
+};
+struct currentusers {
+	string username;
+	string password;
+	string reservationid[100];
+	string eventid[100];
+	string showid[100];
+};
+currentusers user;
+hall halldata[100];
+events eventdata[100];
+shows showdata[100];
+userdata users[100];
+bool admin = false;
+void sort_hall() {
+	int eventindex = 0, showindex = 0;
+	for (int i = 0;!halldata[i].name.empty(); i++)
+	{
+		for (int j = 0; !halldata[i].events_shows[j].empty(); j++)
+		{
+			for (int k = 0;eventdata[k].name.empty();k++)
+			{
+				if (halldata[i].events_shows[j] == eventdata[k].name)
+				{
+					halldata[i].events[eventindex]=halldata[i].events_shows[j];
+					eventindex++;
+			    }    
+
+			}
+		}
+	}
+	for (int i = 0; !halldata[i].name.empty(); i++)
+	{
+		for (int j = 0; !halldata[i].events_shows[j].empty(); j++)
+		{
+			for (int k = 0; showdata[k].name.empty(); k++)
+			{
+				if (halldata[i].events_shows[j] ==showdata[k].name)
+				{
+					halldata[i].shows[showindex] = halldata[i].events_shows[j];
+					showindex++;
+				}
+
+			}
+		}
+	}
+}
+void eventinput()
+{
+	string name;
+	string id;
+	int userday;
+	int usermonth;
+	int useryear;
+	int eventsnumber;
+	int day, month, year,choice,hallindex;
+	int tempday=0, dateindex=0;
+	for (int i = 0; !eventdata[i].name.empty(); i++)
+	{
+		eventsnumber++;
+	}
+
+	cout << "enter event name\n";
+	cin.ignore();
+	getline(cin,name);
+	for (int i = 0; i < eventsnumber; i++)
+	{
+		if (name == eventdata[i].name)
+		{
+			system("cls");
+			cout << "name already exist\n";
+			eventinput();
+		}
+	}
+	srand(time(NULL));
+	ostringstream id_to_string ;
+	id_to_string<< rand();
+	id = id_to_string.str();
+
+
+	cout << "enter start date : day month year\n";
+	cin >> userday >>usermonth >>useryear;
+	cout << "enter end date : day month year\n";
+	cin >>day >>month >>year;
+
+	for (int i = 0;!halldata[i].name.empty(); i++)
+	{
+		cout << i+1<<"."<<halldata[i].name << endl;
+	}
+	cin >> choice;
+	for (int i = 0;!halldata[i].name.empty(); i++)
+	{
+		if (halldata[choice - 1].name == halldata[i].name)
+		{
+			hallindex = i;
+			break;
+		}
+	}
+	for (int i = 0;!halldata[hallindex].events[i].empty(); i++)
+	{
+		for (int j = 0;!eventdata[j].name.empty(); j++)
+		{
+			if (halldata[hallindex].events[i] == eventdata[j].name)
+			{
+				tempday = eventdata[j].startdate.day;
+				dateindex = eventdata[j].enddate.day - eventdata[j].startdate.day;
+				if (dateindex == 0 && eventdata[j].startdate.month == usermonth)
+				{
+
+				}
+		    }
+
+		}
+	}
+}
+int main()
+{
+
+	return 0;
+}
