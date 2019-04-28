@@ -1,0 +1,215 @@
+void eventreservation()
+{
+	system("cls");
+	int resid=0;
+	char confirm;
+	for (int i = 0; !user.eventid[i].empty(); i++)
+	{
+		cout << user.eventid[i] << endl;
+	}
+
+	bool checkevents = false;
+	bool alreadyreserved = false;
+	int eventcnt = 0;
+	int showcnt = 0;
+	for (int j = 0; !eventdata[j].name.empty(); j++)
+	{
+		eventcnt++;
+	}
+	for (int f = 0; !eventdata[f].name.empty(); f++)
+	{
+		showcnt++;
+	}
+	cout << "Select the event you want to reserve : " << endl;
+	int index = 1;
+	for (int i = 0; i < eventcnt; i++)
+	{
+		cout << index << '.';
+		index++;
+		cout << eventdata[i].name << endl;
+	}
+	int choice;
+	cin >> choice;
+	int tobereserveddate = eventdata[choice - 1].startdate.day + (eventdata[choice - 1].startdate.month * 30);
+	int each_eventstdate, each_eventenddate;
+	if (cin.fail())
+	{
+		cout << "Error!Retry." << endl;
+		cin.clear();
+		cin.ignore();
+		eventreservation();
+	}
+	else
+	{
+		if (choice <= index && choice > 0)
+
+		{
+
+			for (int h = 0; h < eventcnt; h++)
+			{
+				if (user.eventid[h] == eventdata[choice - 1].id)
+				{
+					cout << "Already reserved." << endl;
+					checkevents = true;
+					alreadyreserved = true;
+					break;
+				}
+			}
+			if (alreadyreserved == false)
+			{
+				for (int j = 0; j < eventcnt; j++)
+				{
+					for (int k = 0; k < eventcnt; k++)
+					{
+						if (user.eventid[j] == eventdata[k].id)
+						{
+							if (eventdata[k].startdate.day == eventdata[choice - 1].startdate.day && eventdata[k].startdate.month == eventdata[choice - 1].startdate.month && eventdata[k].startdate.year == eventdata[choice - 1].startdate.year)
+							{
+								if (eventdata[k].time == eventdata[choice - 1].time)
+								{
+									cout << "You have a reserved event at the same time slot." << endl;
+									cout << "Do you want to confirm (y/n)?" << endl;
+									cin >> confirm;
+									if (confirm == 'y')
+									{
+										checkevents = false;
+									}
+									else
+									{
+										eventreservation();
+										break;
+									}
+								}
+							}
+							else if (eventdata[k].startdate.day != eventdata[choice - 1].startdate.day && eventdata[k].startdate.month == eventdata[choice - 1].startdate.month && eventdata[k].startdate.year == eventdata[choice - 1].startdate.year)
+							{
+								each_eventstdate = showdata[k].startdate.day + (showdata[k].startdate.month * 30);
+								each_eventenddate = showdata[k].enddate.day + (showdata[k].enddate.month * 30)
+									if (tobereserveddate >= each_eventstdate && tobereserveddate <= each_eventenddate)
+									{
+										if (eventdata[k].time == eventdata[choice - 1].time)
+										{
+											cout << "You have a reserved event at the same time slot." << endl;
+											cout << "Do you want to confirm (y/n)?" << endl;
+											cin >> confirm;
+											if (confirm == 'y')
+											{
+												checkevents = false;
+											}
+											else
+											{
+												eventreservation();
+												break;
+											}
+										}
+									}
+
+							}
+							else if (eventdata[k].startdate.month != eventdata[choice - 1].startdate.month && eventdata[k].startdate.year == eventdata[choice - 1].startdate.year)
+							{
+								each_eventstdate = showdata[k].startdate.day + (showdata[k].startdate.month * 30);
+								each_eventenddate = showdata[k].enddate.day + (showdata[k].enddate.month * 30)
+									if (tobereserveddate >= each_eventstdate && tobereserveddate <= each_eventenddate)
+									{
+										if (eventdata[k].time == eventdata[choice - 1].time)
+										{
+											cout << "You have a reserved event at the same time slot." << endl;
+											cout << "Do you want to confirm (y/n)?" << endl;
+											cin >> confirm;
+											if (confirm == 'y')
+											{
+												checkevents = false;
+											}
+											else
+											{
+												eventreservation();
+												break;
+											}
+										}
+									}
+							}
+							else if (eventdata[k].startdate.year != eventdata[choice - 1].startdate.year)
+							{
+								each_eventstdate = showdata[k].startdate.day + (showdata[k].startdate.month * 30) + (showdata[k].startdate.year * 365);
+								each_eventenddate = showdata[k].enddate.day + (showdata[k].enddate.month * 30) + (showdata[k].enddate.year * 365);
+								if (tobereserveddate >= each_eventstdate && tobereserveddate <= each_eventenddate)
+								{
+									if (eventdata[k].time == eventdata[choice - 1].time)
+									{
+										cout << "You have a reserved event at the same time slot." << endl;
+										cout << "Do you want to confirm (y/n)?" << endl;
+										cin >> confirm;
+										if (confirm == 'y')
+										{
+											checkevents = false;
+										}
+										else
+										{
+											eventreservation();
+											break;
+										}
+									}
+								}
+							}
+						}
+					}
+
+						}
+					}
+				}
+			}
+			if (alreadyreserved == false)
+			{
+				for (int j = 0; j < showcnt; j++)
+				{
+					for (int k = 0; k < showcnt; k++)
+					{
+						if (user.eventid[j] == showdata[k].id)
+						{
+							{
+								if (showdata[k].startdate.day == eventdata[choice - 1].startdate.day && showdata[k].startdate.month == eventdata[choice - 1].startdate.month && showdata[k].startdate.year == eventdata[choice - 1].startdate.year)
+								{
+									if (showdata[k].time == eventdata[choice - 1].time)
+									{
+										cout << "You have a reserved show at the same time slot." << endl;
+										cout << "Do you want to confirm (y/n)?" << endl;
+										cin >> confirm;
+										if (confirm == 'y')
+										{
+											checkevents = false;
+										}
+										else
+										{
+											eventreservation();
+											break;
+										}
+									}
+								}
+								else if (
+							}
+
+						}
+					}
+				}
+			}
+		}
+			if (checkevents == false)
+			{
+				user.eventid[eventcnt-1] = eventdata[choice-1].id;
+				cout << "Reservation done successfully!" << endl;
+
+			}
+
+		else
+		{
+			cout << "Error!Retry." << endl;
+			eventreservation();
+
+		}
+	}
+	for (int i = 0; !user.eventid[i].empty(); i++)
+	{
+		cout << user.eventid[i] << endl;
+	}
+	//cout << user.eventid[];
+	system("pause");
