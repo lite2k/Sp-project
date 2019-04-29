@@ -1,0 +1,240 @@
+void addnewhall()
+{
+	system("cls");
+	cin.ignore();
+	int hallcnt = 0;
+	int room = 0;
+	int floor = 0;
+	int seatsno = 0;
+	string newhall;
+	//loop el cnt to get size
+	for (int j = 0; !halldata[j].name.empty(); j++)
+	{
+		hallcnt++;
+	}
+	cout << "Enter hall's name : ";
+
+	for (int i = 0; !halldata[i].name.empty(); i++)
+	{
+		while (newhall.length() == 0)
+		{                               //keep reading a new line when there is a blank line
+			getline(cin, newhall);
+		}
+		if (halldata[i].name == newhall)
+		{
+			cout << "Sorry , Hall's name already exsist,try again" << endl;
+			system("pause");
+			addnewhall();
+		}
+	}
+	cout << "Enter the place" << endl << "Floor : ";
+	cin >> floor;
+	if (floor <= 0)
+	{
+		cout << "error.Retry" << endl;
+		system("pause");
+		addnewhall();
+	}
+	cout << endl << "Room : ";
+	cin >> room;
+	if (room <= 0)
+	{
+		cout << "Invalid data type.Retry" << endl;
+		system("pause");
+		addnewhall();
+	}
+	for (int k = 0; k < hallcnt; k++)
+	{
+		if (halldata[k].place.room == room)
+		{
+			cout << "Sorry , this room is already reserved ,try again" << endl;
+			cout << "Room : ";
+			cin >> room;
+		}
+	}
+	//endloop
+	cout << "Enter number of seat (max 100) : ";
+	cin >> seatsno;
+	if (seatsno > 100)
+	{
+		cout << "error max seats=100" << endl;
+		cout << "Enter number of seat (max 100) : ";
+		cin >> seatsno;
+	}
+	halldata[hallcnt].name = newhall;
+	halldata[hallcnt].place.floor = floor;
+	halldata[hallcnt].place.room = room;
+	halldata[hallcnt].numberofseats = seatsno;
+	cout << endl << "Addition done" << endl;
+	cout << "*********************" << endl;
+	cout << "data after addition" << endl;
+	cout << "Name : " << halldata[hallcnt].name << endl;
+	cout << "Place : " << endl << "Floor : " << halldata[hallcnt].place.floor << endl;
+	cout << "Room : " << halldata[hallcnt].place.room << endl;
+	cout << "N of seats : " << halldata[hallcnt].numberofseats << endl;
+	cout << "*************" << endl;
+	system("pause");
+	menu_admin();
+}
+void removehall()
+{
+	system("cls");
+	int hallcnt = 0;
+	int evshiftindex = 0;
+	int showshiftindex = 0;
+	int evind = 0;
+	int idshiftindex = 0;
+	string evremid;
+	string shremid;
+	for (int j = 0; !halldata[j].name.empty(); j++)
+	{
+		hallcnt++;
+	}
+	int removalindex;
+	for (int g = 0; g < hallcnt; g++)
+	{
+		cout << g + 1 << '.' << halldata[g].name << endl;
+	}
+	cout << "Choose number of the hall to be removed : " << endl;
+	cin >> removalindex;
+
+
+	for (int i = 0; !eventdata[i].name.empty(); i++)
+	{
+		if (eventdata[i].evinhall == halldata[removalindex - 1].name)
+		{
+			evremid = eventdata[i].id;
+			for (int k = 0; !users[k].username.empty(); k++)
+			{
+				for (int j = 0; !users[k].allids[j].empty(); j++)
+				{
+					if (users[k].allids[j] == evremid)
+					{
+						idshiftindex = j;
+						for (int x = idshiftindex; !users[k].allids[x].empty(); x++)
+						{
+							users[k].allids[x] = users[k].allids[x + 1];
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
+	for (int i = 0; !showdata[i].name.empty(); i++)
+	{
+		if (showdata[i].showinhall == halldata[removalindex - 1].name)
+		{
+			shremid = showdata[i].id;
+			for (int k = 0; !users[k].username.empty(); k++)
+			{
+				for (int j = 0; !users[k].allids[j].empty(); j++)
+				{
+					if (users[k].allids[j] == shremid)
+					{
+						idshiftindex = j;
+						for (int x = idshiftindex; !users[k].allids[x].empty(); x++)
+						{
+							users[k].allids[x] = users[k].allids[x + 1];
+						}
+					}
+				}
+			}
+		}
+	}
+	for (int i = 0; !halldata[removalindex - 1].events_shows[i].empty(); i++)
+	{
+
+		for (int r = 0; !eventdata[r].name.empty(); r++)
+		{
+			if (eventdata[r].name == halldata[removalindex - 1].events_shows[i])
+			{
+				evshiftindex = r;
+				for (int s = evshiftindex; !eventdata[s].name.empty(); s++)
+				{
+					eventdata[s].name = eventdata[s + 1].name;
+					eventdata[s].evinhall = eventdata[s + 1].evinhall;
+					eventdata[s].id = eventdata[s + 1].id;
+					eventdata[s].startdate = eventdata[s + 1].startdate;
+					eventdata[s].time = eventdata[s + 1].time;
+				}
+				break;
+			}
+		}
+	}
+	for (int i = 0; !halldata[removalindex - 1].events_shows[i].empty(); i++)
+	{
+
+		for (int r = 0; !showdata[r].name.empty(); r++)
+		{
+			if (showdata[r].name == halldata[removalindex - 1].events_shows[i])
+			{
+				showshiftindex = r;
+				for (int s = showshiftindex; !showdata[s].name.empty(); s++)
+				{
+					showdata[s].name = showdata[s + 1].name;
+					showdata[s].showinhall = showdata[s + 1].showinhall;
+					showdata[s].id = showdata[s + 1].id;
+					showdata[s].startdate = showdata[s + 1].startdate;
+					showdata[s].time = showdata[s + 1].time;
+				}
+				break;
+			}
+		}
+	}
+
+
+	for (int j = removalindex - 1; !halldata[j].name.empty(); j++)
+	{
+		halldata[j].name = halldata[j + 1].name;
+		halldata[j].place.floor = halldata[j + 1].place.floor;
+		halldata[j].place.room = halldata[j + 1].place.room;
+		halldata[j].numberofseats = halldata[j + 1].numberofseats;
+	}
+	system("pause");
+	cout << "**********************" << endl << "DATA AFTER REMOVAL" << endl << "*******************" << endl;
+	//HALL DATA DISPLAY
+	cout << "HALLS" << endl << endl;
+	for (int p = 0; !halldata[p].name.empty(); p++)
+	{
+		cout << "Name : " << halldata[p].name << endl;
+		cout << "Floor : " << halldata[p].place.floor << endl;
+		cout << "Room : " << halldata[p].place.room << endl;
+		cout << "N of seats : " << halldata[p].numberofseats << endl;
+
+	}
+	//EVENTS DATA DISPLAY
+	cout << endl << "EVENTS" << endl;
+	for (int z = 0; !eventdata[z].name.empty(); z++)
+	{
+		cout << "Name :" << eventdata[z].name << endl;
+		cout << "Location :" << eventdata[z].evinhall << endl;
+		cout << "ID : " << eventdata[z].id << endl;
+		cout << "Start Time :" << eventdata[z].time << endl;
+		cout << "Date :" << eventdata[z].startdate.day << "/" << eventdata[z].startdate.month << "/" << eventdata[z].startdate.year << endl;
+
+	}
+	//shows display
+	cout << endl << "shows" << endl;
+	for (int z = 0; !showdata[z].name.empty(); z++)
+	{
+		cout << "Name :" << showdata[z].name << endl;
+		cout << "Location :" << showdata[z].showinhall << endl;
+		cout << "ID : " << showdata[z].id << endl;
+		cout << "Start Time :" << showdata[z].time << endl;
+		cout << "Date :" << showdata[z].startdate.day << "/" << showdata[z].startdate.month << "/" << showdata[z].startdate.year << endl;
+
+	}
+	//USER IDS DATA DISPLAY
+	cout << endl << "USER IDs" << endl;
+	for (int g = 0; !users[g].username.empty(); g++)
+	{
+		cout << "Name : " << users[g].username << endl;
+		cout << "IDs : " << endl;
+		for (int f = 0; !users[g].allids[f].empty(); f++)
+		{
+			cout << users[g].allids[f] << endl;
+		}
+	}
+	system("pause");
+}
