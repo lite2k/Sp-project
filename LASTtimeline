@@ -1,0 +1,160 @@
+void timeline() 
+{
+	cout << "Enter required date(D/M/Y) : ";
+	int userday, usermonth, useryear,index=0,index2=0;
+	int dateindex, tempshowday,tempshowmonth,tempshowyear;
+	cin >> userday >> usermonth >> useryear;
+	for (int i = 0;!showdata[i].name.empty(); i++)
+	{
+		if (showdata[i].startdate.day == userday && usermonth == showdata[i].startdate.month && showdata[i].startdate.year == useryear)
+		{
+			if (showdata[i].showseats < 100)
+			{
+				cout << "Name :" << showdata[i].name << endl;
+				cout << "Location : " << showdata[i].showinhall << endl;
+				cout << "Time : " << showdata[i].time << endl;
+				cout << "-----------" << endl;
+			}
+		}
+		
+		else if (showdata[i].startdate.day != userday && showdata[i].startdate.year == useryear && showdata[i].startdate.month == usermonth && showdata[i].startdate.month == showdata[i].enddate.month)
+		{
+			dateindex = showdata[i].enddate.day - showdata[i].startdate.day;
+			tempshowday = showdata[i].startdate.day;
+			for (int j = 0; j <= dateindex; j++)
+			{
+				if (tempshowday == userday)
+				{
+					if (showdata[i].showseats < 100)
+					{
+						cout << "Name :" << showdata[i].name << endl;
+						cout << "Location : " << showdata[i].showinhall << endl;
+						cout << "Time : " << showdata[i].time << endl;
+						cout << "-----------" << endl;
+						break;
+					}
+				}
+				else
+				{
+					tempshowday++;
+				}
+
+			}
+		}
+		
+		else if (showdata[i].startdate.month != showdata[i].enddate.month && showdata[i].startdate.year == showdata[i].enddate.year)
+		{
+			int starttotal = showdata[i].startdate.day + (showdata[i].startdate.month * 30) ;
+			int endtotal = showdata[i].enddate.day + (showdata[i].enddate.month * 30) ;
+			index = endtotal - starttotal;
+			tempshowday = showdata[i].startdate.day;
+			tempshowmonth = showdata[i].startdate.month;
+			tempshowyear = showdata[i].startdate.year;
+			while ((tempshowday != userday && tempshowmonth != usermonth) || (tempshowday != userday && tempshowmonth == usermonth) )
+			{
+				index++;
+				tempshowday++;
+				if (tempshowday > 30)
+				{
+					tempshowday = 1;
+					tempshowmonth++;
+				}
+
+			}
+			tempshowday = showdata[i].startdate.day;
+			tempshowmonth = showdata[i].startdate.month;
+			tempshowyear = showdata[i].startdate.year;
+			for (int y = 0;y < index; y++)
+			{
+				if (tempshowday == userday && tempshowmonth == usermonth && tempshowyear == useryear)
+				{
+					if (showdata[i].showseats < 100)
+					{
+						cout << "Name :" << showdata[i].name << endl;
+						cout << "Location : " << showdata[i].showinhall << endl;
+						cout << "Time : " << showdata[i].time << endl;
+						cout << "-----------" << endl;
+						break;
+					}
+				}
+				else
+				{
+					tempshowday++;
+					if (tempshowday > 30)
+					{
+						tempshowmonth++;
+						tempshowday = 1;
+					}
+					if (tempshowmonth > 12)
+					{
+						tempshowyear++;
+						tempshowmonth = 1;
+
+					}
+				}
+			}
+		}
+		
+		else if (showdata[i].startdate.month != showdata[i].enddate.month && showdata[i].startdate.year != showdata[i].enddate.year)
+		{
+			int starttotal = showdata[i].startdate.day + (showdata[i].startdate.month * 30) + (showdata[i].startdate.year * 365);
+			int endtotal = showdata[i].enddate.day + (showdata[i].enddate.month * 30) + (showdata[i].enddate.year * 365);
+			index2 = endtotal - starttotal;
+			tempshowday = showdata[i].startdate.day;
+			tempshowmonth = showdata[i].startdate.month;
+			tempshowyear = showdata[i].startdate.year;
+			while ((tempshowday != userday && tempshowmonth != usermonth && tempshowyear!= useryear) || (tempshowday != userday && tempshowmonth == usermonth && tempshowyear == useryear) )
+			{
+				index2++;
+				tempshowday++;
+				if (tempshowday > 30)
+				{
+					tempshowday = 1;
+					tempshowmonth++;
+				}
+				if (tempshowmonth > 12)
+				{
+					tempshowyear++;
+					tempshowmonth = 1;
+
+				}
+				tempshowday = showdata[i].startdate.day;
+				tempshowmonth = showdata[i].startdate.month;
+				tempshowyear = showdata[i].startdate.year;
+				for (int y = 0;y <= index2; y++)
+				{
+					if (tempshowday == userday && tempshowmonth == usermonth && tempshowyear == useryear)
+					{
+						if (showdata[i].showseats < 100)
+						{
+							cout << "Name :" << showdata[i].name << endl;
+							cout << "Location : " << showdata[i].showinhall << endl;
+							cout << "Time : " << showdata[i].time << endl;
+							cout << "-----------" << endl;
+							break;
+						}
+					}
+					else
+					{
+						tempshowday++;
+						if (tempshowday > 30)
+						{
+							tempshowmonth++;
+							tempshowday = 1;
+						}
+						if (tempshowmonth > 12)
+						{
+							tempshowyear++;
+							tempshowmonth = 1;
+
+						}
+					}
+				}
+			}
+
+		}
+	}
+	
+
+	
+}
