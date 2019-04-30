@@ -1,0 +1,191 @@
+#include<iostream>
+#include<string>
+#include<fstream>
+#include<sstream>
+using namespace std;
+struct date {
+	int day;
+	int year;
+	int month;
+};
+struct shows {
+	string name;
+	string id;
+	string showinhall;
+	date startdate;
+	date enddate;
+	string time;
+	int showseats;
+};
+struct currentuser
+{
+	string username;
+
+	string showid[100];
+};
+currentuser reserver;
+shows showdata[100];
+void geteventdata()
+{
+	int nameindex = 0;
+	int showinhallindex = 1;
+	int idindex = 2;
+	int dayindex = 3;
+	int monthindex = 4;
+	int yearindex = 5;
+	int day1index = 6;
+	int month1index = 7;
+	int year1index = 8;
+	int stime1 = 9;
+	int seats = 10;
+	string tempshow[1000];
+	ifstream getshowdata;
+	getshowdata.open("showdata.txt");
+	if (getshowdata.fail())
+	{
+		cout << "error" << endl;
+	}
+	else
+	{
+		for (int i = 0; i < 1000; i++)
+		{
+			getline(getshowdata, tempshow[i]);
+		}
+		for (int i = 0; !tempshow[i].empty(); i++)
+		{
+
+
+			showdata[i].name = tempshow[nameindex];
+			showdata[i].showinhall = tempshow[showinhallindex];
+			showdata[i].id = tempshow[idindex];
+
+			stringstream day1_to_int(tempshow[dayindex]);
+			day1_to_int >> showdata[i].startdate.day;
+			stringstream month1_to_int(tempshow[monthindex]);
+			month1_to_int >> showdata[i].startdate.month;
+			stringstream year1_to_int(tempshow[yearindex]);
+			year1_to_int >> showdata[i].startdate.year;
+
+			stringstream eday1_to_int(tempshow[day1index]);
+			eday1_to_int >> showdata[i].enddate.day;
+			stringstream emonth1_to_int(tempshow[month1index]);
+			emonth1_to_int >> showdata[i].enddate.month;
+			stringstream eyear1_to_int(tempshow[year1index]);
+			eyear1_to_int >> showdata[i].enddate.year;
+
+			showdata[i].time = tempshow[stime1];
+			stringstream seats_to_int(tempshow[seats]);
+			seats_to_int >> showdata[i].showseats;
+
+			nameindex += 11;
+			showinhallindex += 11;
+			idindex += 11;
+			dayindex += 11;
+			monthindex += 11;
+			yearindex += 11;
+			day1index += 11;
+			month1index += 11;
+			year1index += 11;
+			stime1 += 11;
+			seats += 11;
+
+		}
+	}
+	getshowdata.close();
+}
+void timeline()
+{
+	cout << "Enter required date(D/M/Y) : ";
+	int userday, usermonth, useryear, usertotal, endtotal, starttotal;
+	cin >> userday >> usermonth >> useryear;
+	for (int i = 0;!showdata[i].name.empty(); i++)
+	{
+		if (showdata[i].startdate.day == userday && usermonth == showdata[i].startdate.month && showdata[i].startdate.year == useryear)
+		{
+			if (showdata[i].showseats < 100)
+			{
+				cout << "Name :" << showdata[i].name << endl;
+				cout << "Location : " << showdata[i].showinhall << endl;
+				cout << "Time : " << showdata[i].time << endl;
+				cout << "-----------" << endl;
+			}
+		}
+
+		else if (showdata[i].startdate.day != userday && showdata[i].startdate.year == useryear && showdata[i].startdate.month == usermonth && showdata[i].startdate.month == showdata[i].enddate.month)
+		{
+			int starttotal = showdata[i].startdate.day + (showdata[i].startdate.month * 30);
+			int endtotal = showdata[i].enddate.day + (showdata[i].enddate.month * 30);
+			int usertotal = userday + (usermonth * 30) ;
+
+			if(usertotal >= starttotal && usertotal <= endtotal)
+			{
+					if (showdata[i].showseats < 100)
+					{
+						cout << "Name :" << showdata[i].name << endl;
+						cout << "Location : " << showdata[i].showinhall << endl;
+						cout << "Time : " << showdata[i].time << endl;
+						cout << "-----------" << endl;
+						break;
+					}
+			}
+				
+
+			
+		}
+
+		else if (showdata[i].startdate.month != showdata[i].enddate.month && showdata[i].startdate.year == showdata[i].enddate.year)
+		{
+			int starttotal = showdata[i].startdate.day + (showdata[i].startdate.month * 30);
+			int endtotal = showdata[i].enddate.day + (showdata[i].enddate.month * 30);
+			int usertotal = userday + (usermonth * 30);
+			
+			
+				if (usertotal >= starttotal && usertotal <= endtotal)
+				{
+					if (showdata[i].showseats < 100)
+					{
+						cout << "Name :" << showdata[i].name << endl;
+						cout << "Location : " << showdata[i].showinhall << endl;
+						cout << "Time : " << showdata[i].time << endl;
+						cout << "-----------" << endl;
+						break;
+					}
+				}
+				
+			
+		}
+	
+
+		else if ( showdata[i].startdate.year != showdata[i].enddate.year)
+		{
+			 starttotal = showdata[i].startdate.day + (showdata[i].startdate.month * 30) + (showdata[i].startdate.year * 365);
+			 endtotal = showdata[i].enddate.day + (showdata[i].enddate.month * 30) + (showdata[i].enddate.year * 365);
+			 usertotal = userday + (usermonth * 30) + (useryear * 365);
+			
+					if (usertotal >= starttotal && usertotal <= endtotal)
+					{
+						if (showdata[i].showseats < 100)
+						{
+							cout << "Name :" << showdata[i].name << endl;
+							cout << "Location : " << showdata[i].showinhall << endl;
+							cout << "Time : " << showdata[i].time << endl;
+							cout << "-----------" << endl;
+							break;
+						}
+					}
+					
+		}
+
+	}
+
+
+
+
+}
+
+int main() 
+{
+	geteventdata();
+	timeline();
+	system("pause");
+}
