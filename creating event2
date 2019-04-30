@@ -1,0 +1,578 @@
+void createevent()
+{
+	bool t1 = true;
+	bool t2 = true;
+	bool t3 = true;
+	bool t4 = true;
+	bool t5 = true;
+	bool t6 = true;
+	string x1 = "12:00 to 2:00";
+	string x2 = "2:00 to 4:00";
+	string x3 = "4:00 to 6:00";
+	string x4 = "6:00 to 8:00";
+	string x5 = "8:00 to 10:00";
+	string x6 = "10:00 to 12:00";
+	string name;
+	string id;
+	string time2;
+	string hallname;
+	int userday, usermonth, useryear;
+	int eventsnumber = 0, allcnt = 0;
+	int day, month, year, choice, hallindex;
+	int startformula, endformula, userformula, userendformula;
+
+	for (int i = 0; !eventdata[i].name.empty(); i++)
+	{
+		eventsnumber++;
+	}
+	cin.ignore();
+	cout << "enter event name\n";
+	getline(cin, name);
+
+	for (int i = 0; i < eventsnumber; i++)
+	{
+		if (name == eventdata[i].name)
+		{
+			cout << "name already exist\n";
+			createevent();
+		}
+	}
+	srand(time(NULL));
+	ostringstream id_to_string;
+	id_to_string << rand();
+	id = id_to_string.str();
+
+
+	cout << "enter start date : day month year\n";
+	cin >> userday >> usermonth >> useryear;
+	cout << "enter end date : day month year\n";
+	cin >> day >> month >> year;
+
+
+	userformula = userday + (usermonth * 30) + (useryear * 365);
+	userendformula = day + (month * 30) + (year * 365);
+	if (useryear == year && (userendformula < userformula || userendformula - userformula < 0 || userendformula - userformula > 14))
+	{
+		cout << "error,enddate<startdate or exceded max duration" << endl;
+		system("pause");
+		createevent();
+	}
+	else if (useryear != year && (userendformula < userformula || userendformula - userformula < 0 || userendformula - userformula > 19))
+	{
+		cout << "error,enddate<startdate or exceded max duration" << endl;
+		system("pause");
+		createevent();
+	}
+	else
+	{
+
+
+		for (int i = 0; !halldata[i].name.empty(); i++)
+		{
+			cout << i + 1 << "." << halldata[i].name << endl;
+		}
+		cin >> choice;
+		hallname = halldata[choice - 1].name;
+
+		for (int i = 0; !halldata[choice - 1].events_shows[i].empty(); i++)
+		{
+			allcnt++;
+		}
+
+		for (int i = 0; !halldata[i].name.empty(); i++)
+		{
+			if (halldata[choice - 1].name == halldata[i].name)
+			{
+				hallindex = i;
+				break;
+			}
+		}
+		for (int i = 0; !halldata[hallindex].events_shows[i].empty(); i++)
+		{
+			for (int j = 0; !eventdata[j].name.empty(); j++)
+			{
+				if (halldata[hallindex].events_shows[i] == eventdata[j].name)
+				{
+					if (eventdata[j].startdate.day == userday && eventdata[j].startdate.month == usermonth && eventdata[j].startdate.year == useryear)
+					{
+						if (eventdata[j].time == x1)
+						{
+							t1 = false;
+							break;
+						}
+						else if (eventdata[j].time == x2)
+						{
+							t2 = false;
+							break;
+						}
+						else if (eventdata[j].time == x3)
+						{
+							t3 = false;
+							break;
+						}
+						else if (eventdata[j].time == x4)
+						{
+							t4 = false;
+							break;
+						}
+						else if (eventdata[j].time == x5)
+						{
+							t5 = false;
+							break;
+						}
+						else if (eventdata[j].time == x6)
+						{
+							t6 = false;
+							break;
+						}
+					}
+					else if (eventdata[j].startdate.day != userday && eventdata[j].startdate.month == usermonth && eventdata[j].startdate.year == useryear)
+					{
+						startformula = eventdata[j].startdate.day + (eventdata[j].startdate.month * 30);
+						endformula = eventdata[j].enddate.day + (eventdata[j].enddate.month * 30);
+						userformula = userday + (usermonth * 30);
+						if (userformula >= startformula && userformula <= endformula)
+						{
+
+							if (eventdata[j].time == x1)
+							{
+								t1 = false;
+								break;
+							}
+							else if (eventdata[j].time == x2)
+							{
+								t2 = false;
+								break;
+							}
+							else if (eventdata[j].time == x3)
+							{
+								t3 = false;
+								break;
+							}
+							else if (eventdata[j].time == x4)
+							{
+								t4 = false;
+								break;
+							}
+							else if (eventdata[j].time == x5)
+							{
+								t5 = false;
+								break;
+							}
+							else if (eventdata[j].time == x6)
+							{
+								t6 = false;
+								break;
+							}
+						}
+					}
+					else if (eventdata[j].startdate.month != usermonth && eventdata[j].startdate.year == useryear)
+					{
+						startformula = eventdata[j].startdate.day + (eventdata[j].startdate.month * 30);
+						endformula = eventdata[j].enddate.day + (eventdata[j].enddate.month * 30);
+						userformula = userday + (usermonth * 30);
+						if (userformula >= startformula && userformula <= endformula)
+						{
+							if (eventdata[j].time == x1)
+							{
+								t1 = false;
+								break;
+							}
+							else if (eventdata[i].time == x2)
+							{
+								t2 = false;
+								break;
+							}
+							else if (eventdata[i].time == x3)
+							{
+								t3 = false;
+								break;
+							}
+							else if (eventdata[i].time == x4)
+							{
+								t4 = false;
+								break;
+							}
+							else if (eventdata[i].time == x5)
+							{
+								t5 = false;
+								break;
+							}
+							else if (eventdata[i].time == x6)
+							{
+								t6 = false;
+								break;
+							}
+						}
+					}
+					else if (eventdata[j].startdate.year != useryear)
+					{
+						startformula = eventdata[j].startdate.day + (eventdata[j].startdate.month * 30) + (eventdata[j].startdate.year * 365);
+						endformula = eventdata[j].enddate.day + (eventdata[j].enddate.month * 30) + (eventdata[j].enddate.year * 365);
+						userformula = userday + (usermonth * 30) + (useryear * 365);
+						if (userformula >= startformula && userformula <= endformula)
+						{
+
+							if (eventdata[j].time == x1)
+							{
+								t1 = false;
+								break;
+							}
+							else if (eventdata[j].time == x2)
+							{
+								t2 = false;
+								break;
+							}
+							else if (eventdata[j].time == x3)
+							{
+								t3 = false;
+								break;
+							}
+							else if (eventdata[j].time == x4)
+							{
+								t4 = false;
+								break;
+							}
+							else if (eventdata[j].time == x5)
+							{
+								t5 = false;
+								break;
+							}
+							else if (eventdata[j].time == x6)
+							{
+								t6 = false;
+								break;
+							}
+						}
+					}
+				}
+
+			}
+		}
+
+		for (int i = 0; !halldata[hallindex].events_shows[i].empty(); i++)
+		{
+			for (int j = 0; !showdata[j].name.empty(); j++)
+			{
+				if (halldata[hallindex].events_shows[i] == showdata[j].name)
+				{
+					if (showdata[j].startdate.day == userday && showdata[j].startdate.month == usermonth && showdata[j].startdate.year == useryear)
+					{
+						if (showdata[j].time == x1)
+						{
+							t1 = false;
+							break;
+						}
+						else if (showdata[j].time == x2)
+						{
+							t2 = false;
+							break;
+						}
+						else if (showdata[j].time == x3)
+						{
+							t3 = false;
+							break;
+						}
+						else if (showdata[j].time == x4)
+						{
+							t4 = false;
+							break;
+						}
+						else if (showdata[j].time == x5)
+						{
+							t5 = false;
+							break;
+						}
+						else if (showdata[j].time == x6)
+						{
+							t6 = false;
+							break;
+						}
+					}
+					else if (showdata[j].startdate.day != userday && showdata[j].startdate.month == usermonth && showdata[j].startdate.year == useryear)
+					{
+						startformula = showdata[j].startdate.day + (showdata[j].startdate.month * 30);
+						endformula = showdata[j].enddate.day + (showdata[j].enddate.month * 30);
+						userformula = userday + (usermonth * 30);
+						if (userformula >= startformula && userformula <= endformula)
+						{
+
+							if (showdata[j].time == x1)
+							{
+								t1 = false;
+								break;
+							}
+							else if (showdata[j].time == x2)
+							{
+								t2 = false;
+								break;
+							}
+							else if (showdata[j].time == x3)
+							{
+								t3 = false;
+								break;
+							}
+							else if (showdata[j].time == x4)
+							{
+								t4 = false;
+								break;
+							}
+							else if (showdata[j].time == x5)
+							{
+								t5 = false;
+								break;
+							}
+							else if (showdata[j].time == x6)
+							{
+								t6 = false;
+								break;
+							}
+						}
+					}
+					else if (showdata[j].startdate.month != usermonth && showdata[j].startdate.year == useryear)
+					{
+						startformula = showdata[j].startdate.day + (showdata[j].startdate.month * 30);
+						endformula = showdata[j].enddate.day + (showdata[j].enddate.month * 30);
+						userformula = userday + (usermonth * 30);
+						if (userformula >= startformula && userformula <= endformula)
+						{
+							if (showdata[j].time == x1)
+							{
+								t1 = false;
+								break;
+							}
+							else if (showdata[i].time == x2)
+							{
+								t2 = false;
+								break;
+							}
+							else if (showdata[i].time == x3)
+							{
+								t3 = false;
+								break;
+							}
+							else if (showdata[i].time == x4)
+							{
+								t4 = false;
+								break;
+							}
+							else if (showdata[i].time == x5)
+							{
+								t5 = false;
+								break;
+							}
+							else if (showdata[i].time == x6)
+							{
+								t6 = false;
+								break;
+							}
+						}
+					}
+					else if (showdata[j].startdate.year != useryear)
+					{
+						startformula = showdata[j].startdate.day + (showdata[j].startdate.month * 30) + (showdata[j].startdate.year * 365);
+						endformula = showdata[j].enddate.day + (showdata[j].enddate.month * 30) + (showdata[j].enddate.year * 365);
+						userformula = userday + (usermonth * 30) + (useryear * 365);
+						if (userformula >= startformula && userformula <= endformula)
+						{
+
+							if (showdata[j].time == x1)
+							{
+								t1 = false;
+								break;
+							}
+							else if (showdata[j].time == x2)
+							{
+								t2 = false;
+								break;
+							}
+							else if (showdata[j].time == x3)
+							{
+								t3 = false;
+								break;
+							}
+							else if (showdata[j].time == x4)
+							{
+								t4 = false;
+								break;
+							}
+							else if (showdata[j].time == x5)
+							{
+								t5 = false;
+								break;
+							}
+							else if (showdata[j].time == x6)
+							{
+								t6 = false;
+								break;
+							}
+						}
+					}
+				}
+
+			}
+
+		}
+		int choice2 = 0;
+		int ind = 1;
+		if (t1)
+		{
+			cout << ind << "." << x1 << endl;
+			ind++;
+		}
+		else
+		{
+			cout << ind << "." << x1 << "			" << "Reserved" << endl;
+			ind++;
+		}if (t2)
+		{
+			cout << ind << "." << x2 << endl;
+			ind++;
+		}
+		else
+		{
+			cout << ind << "." << x2 << "			" << "Reserved" << endl;
+			ind++;
+		}if (t3)
+		{
+			cout << ind << "." << x3 << endl;
+			ind++;
+		}
+		else
+		{
+			cout << ind << "." << x3 << "			" << "Reserved" << endl;
+			ind++;
+		}
+		if (t4)
+		{
+			cout << ind << "." << x4 << endl;
+			ind++;
+		}
+		else
+		{
+			cout << ind << "." << x4 << "			" << "Reserved" << endl;
+			ind++;
+		}
+		if (t5)
+		{
+			cout << ind << "." << x5 << endl;
+			ind++;
+		}
+		else
+		{
+			cout << ind << "." << x5 << "			" << "Reserved" << endl;
+			ind++;
+		}if (t6)
+		{
+			cout << ind << "." << x6 << endl;
+			ind++;
+		}
+		else
+		{
+			cout << ind << "." << x6 << "			" << "Reserved" << endl;
+			ind++;
+		}
+		cin >> choice2;
+		switch (choice2)
+		{
+		case 1:
+			if (t1 == false)
+			{
+				cout << "time slot not avaliable";
+				system("pause");
+				createevent();
+			}
+			else
+			{
+				time2 = x1;
+			}
+			break;
+		case 2:
+			if (t2 == false)
+			{
+				cout << "time slot not avaliable";
+				system("pause");
+				createevent();
+			}
+			else
+			{
+				time2 = x2;
+			}
+			break;
+		case 3:
+			if (t3 == false)
+			{
+				cout << "time slot not avaliable";
+				system("pause");
+				createevent();
+			}
+			else
+			{
+				time2 = x3;
+			}
+			break;
+		case 4:
+			if (t4 == false)
+			{
+				cout << "time slot not avaliable";
+				system("pause");
+				createevent();
+			}
+			else
+			{
+				time2 = x4;
+			}
+			break;
+		case 5:
+			if (t5 == false)
+			{
+				cout << "time slot not avaliable";
+				system("pause");
+				createevent();
+			}
+			else
+			{
+				time2 = x5;
+			}
+			break;
+		case 6:
+			if (t6 == false)
+			{
+				cout << "time slot not avaliable";
+				system("pause");
+				createevent();
+			}
+			else
+			{
+				time2 = x6;
+			}
+			break;
+		default:
+			cout << "invalid input";
+			system("pause");
+			createevent();
+			break;
+		}
+		cout << "Event ccreated" << endl;
+		eventdata[eventsnumber].name = name;
+		eventdata[eventsnumber].id = id;
+		eventdata[eventsnumber].evinhall = hallname;
+		eventdata[eventsnumber].startdate.day = userday;
+		eventdata[eventsnumber].startdate.month = usermonth;
+		eventdata[eventsnumber].startdate.year = useryear;
+		eventdata[eventsnumber].enddate.day = day;
+		eventdata[eventsnumber].enddate.month = month;
+		eventdata[eventsnumber].enddate.year = year;
+		eventdata[eventsnumber].time = time2;
+		halldata[choice - 1].events_shows[allcnt] = name;
+		cout << "**********************************" << endl;
+		cout << " New Event Data " << endl;
+		cout << "**********************************" << endl;
+		cout << "Event Name : " << eventdata[4].name << endl;
+		cout << "Event Id : " << eventdata[4].id << endl;
+		cout << "Event hall : " << eventdata[4].evinhall << endl;
+		cout << "Event Start date : " << eventdata[4].startdate.day << "/" << eventdata[4].startdate.month << "/" << eventdata[4].startdate.year << endl;
+		cout << "Event End date : " << eventdata[4].enddate.day << "/" << eventdata[4].enddate.month << "/" << eventdata[4].enddate.year << endl;
+		cout << "Event duration : From " << eventdata[4].time << endl;
+	}
+}
